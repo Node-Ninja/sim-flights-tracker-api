@@ -1,0 +1,21 @@
+package dev.nodeninja.simflightstracker.model.ivao;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class IvaoAirportSummary {
+    private String icao;
+    private String iata;
+    private String name;
+    private String countryId;
+    private String city;
+    private Double latitude;
+    private Double longitude;
+    private Boolean military;
+}
