@@ -46,9 +46,12 @@ public class VatsimFlight {
                 : null;
 
         return FlightSummary.builder()
-                .callsign(this.callsign)
-                .latitude(this.latitude)
-                .longitude(this.longitude)
+                .callsign(callsign)
+                .latitude(latitude)
+                .longitude(longitude)
+                .groundspeed(groundspeed)
+                .heading(heading)
+                .altitude(altitude)
                 .flightPlan(flightPlanSummary)
                 .build();
     }

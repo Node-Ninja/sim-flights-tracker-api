@@ -1,6 +1,7 @@
 package dev.nodeninja.simflightstracker.service;
 
 import dev.nodeninja.simflightstracker.model.AirTrafficController;
+import dev.nodeninja.simflightstracker.model.Aircraft;
 import dev.nodeninja.simflightstracker.model.Flight;
 import dev.nodeninja.simflightstracker.model.FlightSummary;
 import dev.nodeninja.simflightstracker.model.ivao.response.IvaoLiveData;
@@ -35,4 +36,11 @@ public interface IvaoService {
      * @return A list of live flight summaries
      */
     Mono<List<FlightSummary>> getFlights();
+
+    /**
+     * Get aircraft details matching provided ID;
+     * @param aircraftId ICAO aircraft ID or FAA Aircraft Short ID
+     * @return Aircraft details
+     */
+    Mono<Optional<Aircraft>> aircraftDetails(String aircraftId);
 }

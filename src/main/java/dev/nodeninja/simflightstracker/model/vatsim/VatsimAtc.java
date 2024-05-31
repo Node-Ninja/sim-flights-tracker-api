@@ -34,7 +34,7 @@ public class VatsimAtc {
 
     public AtcSummary toSummary() {
         return AtcSummary.builder()
-                .callSign(this.callsign)
+                .callsign(this.callsign)
                 .frequency(this.frequency)
                 .facility(GenericUtils.mapControllerType(this.callsign))
                 .build();

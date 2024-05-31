@@ -43,6 +43,9 @@ public class IvaoFlight {
                 .callsign(this.callsign)
                 .latitude(hasLastTrack ? this.lastTrack.latitude : 0.0)
                 .longitude(hasLastTrack ? this.lastTrack.longitude : 0.0)
+                .altitude(hasLastTrack ? this.lastTrack.altitude : 0)
+                .groundspeed(hasLastTrack ? this.lastTrack.groundSpeed : 0)
+                .heading(hasLastTrack ? this.lastTrack.heading : 0)
                 .flightPlan(flightPlanSummary)
                 .build();
     }

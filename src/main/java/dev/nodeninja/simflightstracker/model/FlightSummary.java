@@ -15,6 +15,9 @@ public class FlightSummary {
     private String callsign;
     private Double latitude;
     private Double longitude;
+    private Integer groundspeed;
+    private Integer heading;
+    private Integer altitude;
     @Nullable
     private FlightPlanSummary flightPlan;
 }

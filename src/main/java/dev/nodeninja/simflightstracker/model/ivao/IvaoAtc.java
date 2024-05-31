@@ -28,7 +28,7 @@ public class IvaoAtc {
 
     public AtcSummary toSummary() {
         return AtcSummary.builder()
-                .callSign(this.callsign)
+                .callsign(this.callsign)
                 .frequency(this.atcSession.getFrequency().toString())
                 .facility(GenericUtils.mapControllerType(this.callsign))
                 .build();

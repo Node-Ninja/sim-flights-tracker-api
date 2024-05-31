@@ -3,8 +3,10 @@ package dev.nodeninja.simflightstracker.service.impl;
 import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
 import dev.nodeninja.simflightstracker.config.IvaoAuthenticatedWebClient;
 import dev.nodeninja.simflightstracker.model.AirTrafficController;
+import dev.nodeninja.simflightstracker.model.Aircraft;
 import dev.nodeninja.simflightstracker.model.Flight;
 import dev.nodeninja.simflightstracker.model.FlightSummary;
+import dev.nodeninja.simflightstracker.model.dto.ivao.response.AircraftDetailsResponse;
 import dev.nodeninja.simflightstracker.model.ivao.IvaoAtc;
 import dev.nodeninja.simflightstracker.model.ivao.IvaoFlight;
 import dev.nodeninja.simflightstracker.model.ivao.response.IvaoLiveData;
@@ -88,6 +90,22 @@ public class IvaoServiceImpl implements IvaoService {
 
     }
 
+    @Override
+    public Mono<Optional<Aircraft>> aircraftDetails(String aircraftId) {
+        return authenticatedWebClient
+                .sendRequest(
+                        configProps.getIvao().getHost().getV2() + "/aircrafts/" + aircraftId,
+                        HttpMethod.GET,
+                        HttpHeaders.EMPTY,
+                        null,
+                        null,
+                        AircraftDetailsResponse.class
+                )
+                .map(AircraftDetailsResponse::mapToAircraft)
+                .onErrorMap(exception -> exception).singleOptional();
+    }
+
+
     private Mono<List<IvaoFlight>> buildPilotsRequest() {
         return authenticatedWebClient
                 .sendRequest(
@@ -111,4 +129,6 @@ public class IvaoServiceImpl implements IvaoService {
                         new ParameterizedTypeReference<>() {}
                 );
     }
+
+
 }

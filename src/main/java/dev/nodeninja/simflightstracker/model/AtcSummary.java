@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AtcSummary {
-    private String callSign;
+    private String callsign;
     private String frequency;
     private  ControllerType facility;
 }
