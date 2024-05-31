@@ -3,6 +3,7 @@ package dev.nodeninja.simflightstracker.model.ivao;
 import dev.nodeninja.simflightstracker.model.AirTrafficController;
 import dev.nodeninja.simflightstracker.model.AtcSummary;
 import dev.nodeninja.simflightstracker.util.GenericUtils;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class IvaoAtc {
     private Integer time;
     private IvaoAtcSession atcSession;
     private IvaoSoftwareType softwareType;
+    @Nullable
     private IvaoAtcPosition atcPosition;
 
     public AtcSummary toSummary() {

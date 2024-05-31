@@ -12,6 +12,7 @@ import dev.nodeninja.simflightstracker.model.ivao.IvaoFlight;
 import dev.nodeninja.simflightstracker.model.ivao.response.IvaoLiveData;
 import dev.nodeninja.simflightstracker.service.IvaoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IvaoServiceImpl implements IvaoService {
@@ -67,11 +69,18 @@ public class IvaoServiceImpl implements IvaoService {
                         null,
                         new ParameterizedTypeReference<List<IvaoAtc>>() {}
                 )
-                .map(controllers -> {
+                .mapNotNull(controllers -> {
                     var foundController =  controllers.stream().filter(controller -> controller.getCallsign().equals(callsign)).findFirst();
-                    return foundController.map(IvaoAtc::toGenericController).orElse(null);
+
+                    if (foundController.isPresent()) {
+                        return foundController.map(IvaoAtc::toGenericController).orElse(null);
+                    }
+                    return null;
                 })
-                .onErrorMap(exception -> exception).singleOptional();
+                .onErrorMap(exception -> {
+                    log.warn(" Something went wrong :: ", exception);
+                    return exception;
+                }).singleOptional();
     }
 
     @Override

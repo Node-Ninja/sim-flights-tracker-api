@@ -14,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -85,7 +87,7 @@ public class IvaoAuthenticatedWebClient {
                            .retryWhen(Retry
                                    .backoff(
                                            3,
-                                           Duration.ofSeconds(60)
+                                           Duration.ofSeconds(5)
                                    )
                                    .jitter(0.25)
                                    .filter(throwable -> throwable instanceof AuthenticationException)
@@ -154,5 +156,15 @@ public class IvaoAuthenticatedWebClient {
                 .doOnNext(next -> log.warn("Unauthorised response received. Refreshing token"))
                 .flatMap(response -> getToken(true))
                 .flatMap(authToken -> Mono.error(new AuthenticationException("Could not authenticate with Ivao.")));
+    }
+
+    protected static ExchangeFilterFunction modifyTokenHeader() {
+        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
+            ClientRequest modifiedRequest = ClientRequest.from(clientRequest)
+                    .header("Authorization", "Bearer " + token)
+                    .build();
+
+            return Mono.just(modifiedRequest);
+        });
     }
 }

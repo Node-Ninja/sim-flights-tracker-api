@@ -1,5 +1,6 @@
 package dev.nodeninja.simflightstracker.model.ivao;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IvaoAirportSummary {
     private String icao;
+    @Nullable
     private String iata;
     private String name;
     private String countryId;
