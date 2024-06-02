@@ -4,6 +4,7 @@ import dev.nodeninja.simflightstracker.model.Flight;
 import dev.nodeninja.simflightstracker.model.FlightPlan;
 import dev.nodeninja.simflightstracker.model.FlightPlanSummary;
 import dev.nodeninja.simflightstracker.model.FlightSummary;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class IvaoFlight {
     private IvaoPilotSession pilotSession;
     private IvaoSoftwareType softwareType;
     private IvaoLastTrack lastTrack;
+    @Nullable
     private IvaoFlightPlan flightPlan;
 
     public FlightSummary toSummary() {
@@ -51,7 +53,7 @@ public class IvaoFlight {
     }
 
     public Flight toGenericFlight() {
-        var flightPlan = this.flightPlan != null
+        var flightPlan = (this.flightPlan != null && this.flightPlan.departure != null)
                 ? FlightPlan.builder()
                 .departure(this.flightPlan.getDepartureId())
                     .arrival(this.flightPlan.getArrivalId())
