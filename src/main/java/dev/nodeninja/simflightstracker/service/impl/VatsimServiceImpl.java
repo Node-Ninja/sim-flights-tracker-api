@@ -52,11 +52,13 @@ public class VatsimServiceImpl implements VatsimService {
                 .retrieve()
                 .onStatus(HttpStatus.NOT_FOUND::equals, res -> Mono.error(new FlightNotFoundException("Not Found")))
                 .bodyToMono(VatsimDataApiResponse.class)
-                .map(response -> {
+                .mapNotNull(response -> {
                     var flights = response.getPilots();
                     var foundFlight = flights.stream()
                             .filter(flight -> callSign.equals(flight.getCallsign()))
                             .findFirst();
+
+                    if (foundFlight.isEmpty()) return null;
 
                     return foundFlight.map(VatsimFlight::toGenericFlight).orElse(null);
                 })

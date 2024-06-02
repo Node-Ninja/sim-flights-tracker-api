@@ -51,8 +51,11 @@ public class IvaoServiceImpl implements IvaoService {
                         null,
                         new ParameterizedTypeReference<List<IvaoFlight>>() {}
                 )
-                .map(flights -> {
+                .mapNotNull(flights -> {
                     var foundFlight = flights.stream().filter(flight -> flight.getCallsign().equals(callsign)).findFirst();
+
+                    if (foundFlight.isEmpty()) return null;
+
                     return foundFlight.map(IvaoFlight::toGenericFlight).orElse(null);
                 })
                 .onErrorMap(exception -> exception).singleOptional();
