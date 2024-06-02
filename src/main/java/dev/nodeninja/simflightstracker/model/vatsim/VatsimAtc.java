@@ -37,6 +37,8 @@ public class VatsimAtc {
                 .callsign(this.callsign)
                 .frequency(this.frequency)
                 .facility(GenericUtils.mapControllerType(this.callsign))
+                .latitude(null)
+                .longitude(null)
                 .build();
     }
 

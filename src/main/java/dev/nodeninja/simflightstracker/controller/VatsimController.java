@@ -3,13 +3,16 @@ package dev.nodeninja.simflightstracker.controller;
 import dev.nodeninja.simflightstracker.model.AirTrafficController;
 import dev.nodeninja.simflightstracker.model.EventSummary;
 import dev.nodeninja.simflightstracker.model.Flight;
-import dev.nodeninja.simflightstracker.model.vatsim.VatsimAtc;
 import dev.nodeninja.simflightstracker.model.vatsim.VatsimEvent;
 import dev.nodeninja.simflightstracker.model.vatsim.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.model.vatsim.response.VatsimLiveData;
 import dev.nodeninja.simflightstracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.util.List;

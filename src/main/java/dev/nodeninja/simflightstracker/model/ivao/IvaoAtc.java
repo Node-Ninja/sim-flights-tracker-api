@@ -29,10 +29,23 @@ public class IvaoAtc {
     private IvaoAtcPosition atcPosition;
 
     public AtcSummary toSummary() {
+        Double lat;
+        Double lng;
+
+        if (atcPosition != null) {
+            lat = atcPosition.getAirport().getLatitude();
+            lng = atcPosition.getAirport().getLongitude();
+        } else {
+            lat = null;
+            lng = null;
+        }
+
         return AtcSummary.builder()
                 .callsign(this.callsign)
                 .frequency(this.atcSession.getFrequency().toString())
                 .facility(GenericUtils.mapControllerType(this.callsign))
+                .latitude(lat)
+                .longitude(lng)
                 .build();
     }
 
