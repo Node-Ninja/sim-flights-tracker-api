@@ -47,12 +47,12 @@ public class VatsimController {
         return vatsimService.metarByAirportIcaoId(icaoId);
     }
 
-    @GetMapping("/events")
+    @PostMapping("/events")
     public Mono<List<EventSummary>> getEvents() {
         return vatsimService.events();
     }
 
-    @GetMapping("/events/{eventId}")
+    @PostMapping("/events/{eventId}")
     public Mono<VatsimEvent> getEventDetails(@NotNull @PathVariable String eventId) {
         return vatsimService.eventDetails(eventId);
     }
