@@ -9,20 +9,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Array;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v2/airport")
 public class AirportController {
     private final AirportService airportService;
-    private final VatsimService vatsimService;
 
     public AirportController(AirportServiceImpl airportService, VatsimService vatsimService) {
         this.airportService = airportService;
-        this.vatsimService = vatsimService;
     }
 
     @Operation(
@@ -31,5 +32,10 @@ public class AirportController {
     @GetMapping("/{icaoId}")
     public ResponseEntity<Optional<Airport>> getAirportDetails(@PathVariable String icaoId) {
         return new ResponseEntity<>(airportService.getAirportDetails(icaoId), HttpStatus.OK);
+    }
+
+    @PostMapping("/{query}")
+    ResponseEntity<List<Airport>> searchAirports(@PathVariable String query) {
+        return new ResponseEntity<>(airportService.searchAirports(query), HttpStatus.OK);
     }
 }

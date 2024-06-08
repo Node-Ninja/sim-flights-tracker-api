@@ -72,7 +72,7 @@ public class IvaoAuthenticatedWebClient {
                            .uri(uri)
                            .contentType(MediaType.APPLICATION_JSON)
                            .accept(MediaType.APPLICATION_JSON)
-                           .headers(getRequestHeaders(ivaoToken, headers));
+                           .headers(getRequestHeaders(token, headers));
 
                    //   if method is not get, then include body;
                    if (httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT || httpMethod == HttpMethod.PATCH) {

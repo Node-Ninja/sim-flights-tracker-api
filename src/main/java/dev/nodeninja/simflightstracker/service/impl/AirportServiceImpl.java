@@ -5,6 +5,7 @@ import dev.nodeninja.simflightstracker.repository.AirportRepository;
 import dev.nodeninja.simflightstracker.service.AirportService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +19,10 @@ public class AirportServiceImpl implements AirportService {
     @Override
     public Optional<Airport> getAirportDetails(String icao) {
         return airportRepository.findAirportByIdent(icao);
+    }
+
+    @Override
+    public List<Airport> searchAirports(String query) {
+        return airportRepository.findBy(query);
     }
 }
