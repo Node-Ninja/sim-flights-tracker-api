@@ -1,5 +1,7 @@
 package dev.nodeninja.simflightstracker.config;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.nodeninja.simflightstracker.exceptions.AuthenticationException;
 import dev.nodeninja.simflightstracker.exceptions.BusinessException;
 import dev.nodeninja.simflightstracker.model.dto.ivao.response.IvaoTokenResponseDto;
@@ -23,6 +25,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -65,14 +68,25 @@ public class IvaoAuthenticatedWebClient {
             final Class<RequestType> requestType,
             final ParameterizedTypeReference<ResponseType> responseType
     ) {
-        return getToken(false)
+        boolean shouldRefresh = false;
+
+        if (token != null) {
+            DecodedJWT jwt = JWT.decode(token);
+
+            if (jwt.getExpiresAt().before(new Date())) {
+                shouldRefresh = true;
+                log.info("JWT has expired, should refresh :: {}", true);
+            }
+
+        }
+        return getToken(shouldRefresh)
                 .flatMap(ivaoToken -> {
                    var client = webClient
                            .method(httpMethod)
                            .uri(uri)
                            .contentType(MediaType.APPLICATION_JSON)
                            .accept(MediaType.APPLICATION_JSON)
-                           .headers(getRequestHeaders(token, headers));
+                           .headers(getRequestHeaders(ivaoToken, headers));
 
                    //   if method is not get, then include body;
                    if (httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT || httpMethod == HttpMethod.PATCH) {
