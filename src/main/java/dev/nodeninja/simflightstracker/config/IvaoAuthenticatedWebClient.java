@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.nodeninja.simflightstracker.exceptions.AuthenticationException;
 import dev.nodeninja.simflightstracker.exceptions.BusinessException;
-import dev.nodeninja.simflightstracker.model.dto.ivao.response.IvaoTokenResponseDto;
+import dev.nodeninja.simflightstracker.tracker.adapter.ivao.model.IvaoTokenResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

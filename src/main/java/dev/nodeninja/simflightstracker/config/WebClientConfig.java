@@ -16,7 +16,7 @@ public class WebClientConfig {
     private final ApplicationConfigProperties configProps;
 
     @Bean
-    public WebClient webClient(WebClient.Builder webClientBuilder) {
+    WebClient webClient(WebClient.Builder webClientBuilder) {
         return webClientBuilder
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .codecs(codecs -> codecs

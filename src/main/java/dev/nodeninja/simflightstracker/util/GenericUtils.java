@@ -1,6 +1,6 @@
 package dev.nodeninja.simflightstracker.util;
 
-import dev.nodeninja.simflightstracker.model.ControllerType;
+import dev.nodeninja.simflightstracker.tracker.model.ControllerType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
