@@ -64,6 +64,7 @@ public class TrackerMapper {
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
                 .id(event.getId())
+                .poster(event.getBanner())
                 .build();
     }
 

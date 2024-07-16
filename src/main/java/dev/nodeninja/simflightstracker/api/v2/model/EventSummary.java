@@ -14,4 +14,5 @@ public class EventSummary {
     private String name;
     private OffsetDateTime startTime;
     private OffsetDateTime endTime;
+    private String poster;
 }
