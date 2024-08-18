@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
 import dev.nodeninja.simflightstracker.api.v2.model.AtcSummary;
 import dev.nodeninja.simflightstracker.util.GenericUtils;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 import java.time.OffsetDateTime;
 

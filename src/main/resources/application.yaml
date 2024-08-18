@@ -4,7 +4,7 @@ spring:
       database: simflightstracker
       uri: mongodb+srv://apps:${MONGO_PASS}@sft.lmbdj.mongodb.net
   codec:
-    max-in-memory-size: 2MB
+    max-in-memory-size: 4MB
 
 sft:
   ivao:

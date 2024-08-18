@@ -27,7 +27,10 @@ public class VatsimAdapterImpl implements VatsimAdapter {
                 .uri(configProps.getVatsim().getHost().getV3()  + "/vatsim-data.json")
                 .retrieve()
                 .bodyToMono(VatsimDataApiResponse.class)
-                .onErrorMap(exception -> new RuntimeException())
+                .onErrorMap(ex -> {
+                    System.out.println(ex.getMessage());
+                    return new GenericNotFoundException(ex.getMessage());
+                })
                 .block();
     }
 
