@@ -2,9 +2,6 @@ package dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.AtcSummary;
-import dev.nodeninja.simflightstracker.util.GenericUtils;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -28,7 +26,7 @@ public class VatsimAtc {
     private String server;
     private Integer visualRange;
     @Nullable
-    private String[] textAtis;
+    private List<String> textAtis;
     private OffsetDateTime lastUpdated;
     private OffsetDateTime logonTime;
 }

@@ -52,7 +52,10 @@ public class TrackerMapper {
                 .name(controller.getName())
                 .frequency(controller.getFrequency())
                 .facility(controller.getFacility())
+                .rating(controller.getRating())
                 .callsign(controller.getCallsign())
+                .textAtis(controller.getTextAtis())
+                .logonTime(controller.getLogonTime())
                 .connectionType(null)
                 .atcPosition(null)
                 .build();

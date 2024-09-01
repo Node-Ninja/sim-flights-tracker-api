@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,4 +21,7 @@ public class AirTrafficController {
     private String callsign;
     private String connectionType;
     private IvaoAtcPosition atcPosition;
+    private List<String> textAtis;
+    private OffsetDateTime logonTime;
+    private Integer rating;
 }
