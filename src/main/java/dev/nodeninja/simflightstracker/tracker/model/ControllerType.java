@@ -7,5 +7,6 @@ public enum ControllerType {
     APPROACH,
     CENTER,
     OBSERVER,
+    FLIGHT_SERVICE,
     UNKNOWN
 }

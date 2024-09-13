@@ -27,6 +27,9 @@ public class GenericUtils {
         if (StringUtils.contains(callsign, "_OBS")) {
             controllerType = ControllerType.OBSERVER;
         }
+        if (StringUtils.contains(callsign, "_FSS")) {
+            controllerType = ControllerType.FLIGHT_SERVICE;
+        }
 
         return controllerType;
     }
