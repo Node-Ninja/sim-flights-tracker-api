@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class VatsimAdapterImpl implements VatsimAdapter {
+public class VatsimAdapterRestImpl implements VatsimAdapter {
     private final ApplicationConfigProperties configProps;
     private final WebClient webClient;
 

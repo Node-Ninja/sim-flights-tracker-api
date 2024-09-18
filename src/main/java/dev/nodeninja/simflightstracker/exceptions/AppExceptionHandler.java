@@ -16,9 +16,9 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(value = BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(
                 ErrorResponse.builder()
-                        .statusCode(HttpStatus.CONFLICT)
+                        .statusCode(HttpStatus.BAD_GATEWAY)
                         .message(ex.getMessage())
                         .errorCode("FAIL_CONFLICT")
                         .timestamp(LocalDateTime.now())
@@ -41,11 +41,11 @@ public class AppExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         log.info("Generic exception handled :: ");
-        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 ErrorResponse.builder()
-                        .statusCode(HttpStatus.PRECONDITION_FAILED)
+                        .statusCode(HttpStatus.BAD_REQUEST)
                         .message("Something went wrong. Please try again later")
-                        .errorCode("FAIL_CONFLICT")
+                        .errorCode("FAIL_BAD_REQUEST")
                         .timestamp(LocalDateTime.now())
                         .build()
         );

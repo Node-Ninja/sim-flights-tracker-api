@@ -1,6 +1,5 @@
 package dev.nodeninja.simflightstracker.tracker.adapter.ivao.model;
 
-import dev.nodeninja.simflightstracker.api.v2.model.Aircraft;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
