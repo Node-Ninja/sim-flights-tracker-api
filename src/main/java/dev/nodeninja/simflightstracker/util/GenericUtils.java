@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GenericUtils {
+
+    /**
+     * Map controller callsign code to a controller type;
+     * @param callsign Controller callsign;
+     * @return ControllerType
+     */
     public static ControllerType mapControllerType(String callsign) {
         ControllerType controllerType = ControllerType.UNKNOWN;
 
