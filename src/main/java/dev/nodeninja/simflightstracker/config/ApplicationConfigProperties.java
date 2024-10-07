@@ -8,8 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties("sft")
 public class ApplicationConfigProperties {
-    private VatsimConfigProperties vatsim = new VatsimConfigProperties();
-    private IvaoConfigProperties ivao = new IvaoConfigProperties();
+    private final VatsimConfigProperties vatsim = new VatsimConfigProperties();
+    private final IvaoConfigProperties ivao = new IvaoConfigProperties();
+    private final FirebaseProperties firebase = new FirebaseProperties();
 
     @Data
     @AllArgsConstructor
@@ -52,5 +53,14 @@ public class ApplicationConfigProperties {
         public static class IvaoHostProperties {
             private String v2;
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FirebaseProperties {
+        private String projectName;
+        private String projectNumber;
+        private String appCheckJwk;
     }
 }

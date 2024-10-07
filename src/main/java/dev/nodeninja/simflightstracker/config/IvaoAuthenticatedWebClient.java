@@ -113,10 +113,8 @@ public class IvaoAuthenticatedWebClient {
     }
 
     protected Mono<String> getToken(final boolean shouldGetNewToken) {
-        log.info("[getToken] :: shouldGetNewToken={}", shouldGetNewToken);
 
         if (shouldGetNewToken || StringUtils.isBlank(token)) {
-            log.info("[getToken] :: Getting new IVAO token");
 
             MultiValueMap<String, String> oauthData = getOAuthData();
 
