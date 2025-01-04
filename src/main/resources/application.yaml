@@ -28,3 +28,7 @@ sft:
     project-name: ${FIREBASE_PROJECT_NAME}
     project-number: ${FIREBASE_PROJECT_NAME}
     app-check-jwk: https://firebaseappcheck.googleapis.com/v1/jwks
+
+logging:
+  level:
+    root: info
