@@ -1,9 +1,5 @@
 package dev.nodeninja.simflightstracker.tracker.adapter.ivao.model;
 
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightPlan;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightPlanSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightSummary;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

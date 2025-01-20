@@ -31,6 +31,7 @@ public class AppCheckInterceptor implements HandlerInterceptor {
 
     private final ApplicationConfigProperties configProps;
 
+    @SuppressWarnings("null")
     @Override
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
         String appCheckToken = request.getHeader("Authorization");

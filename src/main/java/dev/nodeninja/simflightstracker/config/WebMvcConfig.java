@@ -12,6 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final AppCheckInterceptor appCheckInterceptor;
 
+    @SuppressWarnings("null")
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(appCheckInterceptor)
