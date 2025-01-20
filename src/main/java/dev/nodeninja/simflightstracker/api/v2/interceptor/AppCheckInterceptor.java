@@ -34,52 +34,54 @@ public class AppCheckInterceptor implements HandlerInterceptor {
     @SuppressWarnings("null")
     @Override
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
-        String appCheckToken = request.getHeader("Authorization");
-        var firebaseProjectName = configProps.getFirebase().getProjectName();
-        var firebaseProjectNumber = configProps.getFirebase().getProjectNumber();
-        var firebaseAppCheckKeyUrl = configProps.getFirebase().getAppCheckJwk();
+        // String appCheckToken = request.getHeader("Authorization");
+        // var firebaseProjectName = configProps.getFirebase().getProjectName();
+        // var firebaseProjectNumber = configProps.getFirebase().getProjectNumber();
+        // var firebaseAppCheckKeyUrl = configProps.getFirebase().getAppCheckJwk();
 
-        if (appCheckToken == null || !appCheckToken.startsWith("Bearer ") || appCheckToken.length() < 36) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
-        }
+        // if (appCheckToken == null || !appCheckToken.startsWith("Bearer ") || appCheckToken.length() < 36) {
+        //     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        //     return false;
+        // }
 
-        try {
-            String token = appCheckToken.substring(7);
+        // try {
+        //     String token = appCheckToken.substring(7);
 
-            if (StringUtils.isBlank(token)) {
-                throw new AuthenticationException("Invalid JWT token");
-            }
+        //     if (StringUtils.isBlank(token)) {
+        //         throw new AuthenticationException("Invalid JWT token");
+        //     }
 
-            DecodedJWT tk = JWT.decode(token);
-            List<String> audience = tk.getAudience();
-            Date expiry = tk.getExpiresAt();
+        //     DecodedJWT tk = JWT.decode(token);
+        //     List<String> audience = tk.getAudience();
+        //     Date expiry = tk.getExpiresAt();
 
-            if (
-                    expiry.before(new Date()) ||
-                    !audience.contains(firebaseProjectName) ||
-                    !audience.contains(firebaseProjectNumber)
-            ) {
-                throw new AuthenticationException("Invalid JWT token");
-            }
+        //     if (
+        //             expiry.before(new Date()) ||
+        //             !audience.contains(firebaseProjectName) ||
+        //             !audience.contains(firebaseProjectNumber)
+        //     ) {
+        //         throw new AuthenticationException("Invalid JWT token");
+        //     }
 
-            //  verify if the token was signed by Firebase;
-            JwkProvider provider = new JwkProviderBuilder(new URL(firebaseAppCheckKeyUrl))
-                    .cached(5, Duration.ofHours(12))
-                    .build();
+        //     //  verify if the token was signed by Firebase;
+        //     JwkProvider provider = new JwkProviderBuilder(new URL(firebaseAppCheckKeyUrl))
+        //             .cached(5, Duration.ofHours(12))
+        //             .build();
 
-            Jwk jwk = provider.get(tk.getKeyId());
-            Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
+        //     Jwk jwk = provider.get(tk.getKeyId());
+        //     Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
 
-            algorithm.verify(tk);
+        //     algorithm.verify(tk);
 
-            return true;
-        } catch (SignatureVerificationException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            return false;
-        }
+        //     return true;
+        // } catch (SignatureVerificationException e) {
+        //     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        //     return false;
+        // } catch (Exception e) {
+        //     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        //     return false;
+        // }
+
+        return true;
     }
 }
