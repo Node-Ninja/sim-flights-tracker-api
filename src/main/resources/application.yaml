@@ -23,6 +23,7 @@ sft:
       v2: https://my.vatsim.net/api/v2
       v3: https://data.vatsim.net/v3
       metar: https://metar.vatsim.net
+      core: https://api.vatsim.net/v2
 
   firebase:
     project-name: ${FIREBASE_PROJECT_NAME}

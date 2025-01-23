@@ -6,6 +6,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.EventSummary;
 import dev.nodeninja.simflightstracker.api.v2.model.Flight;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,5 +58,10 @@ public class VatsimController {
     @PostMapping("/transceivers")
     public List<VatsimTransceiver> getTransceivers() {
         return vatsimService.transceivers();
+    }
+
+    @PostMapping("/history/flights/{vatsimId}/{offset}")
+    public VatsimFlightsHistory getFlightsHistory(@NotNull @PathVariable String vatsimId, @NotNull @PathVariable int offset) {
+        return vatsimService.flightsHistory(vatsimId, offset);
     }
 }

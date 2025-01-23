@@ -1,6 +1,7 @@
 package dev.nodeninja.simflightstracker.tracker.adapter.vatsim;
 
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimV3BaseResponse;
 import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimDataApiResponse;
@@ -75,6 +76,24 @@ public class VatsimAdapterRestImpl implements VatsimAdapter {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<VatsimTransceiver>>() {})
                 .onErrorMap(ex -> ex)
+                .block();
+    }
+
+    @Override
+    public VatsimFlightsHistory flightHistory(String vatsimId, Integer offset) throws HttpClientErrorException {
+        if (offset == null) {
+            offset = 0;
+        }
+
+        return webClient
+                .get()
+                .uri(configProps.getVatsim().getHost().getCore()  + "/members/" + vatsimId + "/history?offset=" + offset)
+                .retrieve()
+                .bodyToMono(VatsimFlightsHistory.class)
+                .onErrorMap(ex -> {
+                    System.out.println(ex.getMessage());
+                    return new GenericNotFoundException(ex.getMessage());
+                })
                 .block();
     }
 }

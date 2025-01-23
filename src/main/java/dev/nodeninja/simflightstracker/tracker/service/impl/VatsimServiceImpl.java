@@ -7,6 +7,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.VatsimAdapter;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import lombok.RequiredArgsConstructor;
@@ -89,5 +90,10 @@ public class VatsimServiceImpl implements VatsimService {
                         StringUtils.right(
                                 ts1.getCallsign(),
                                 3))).toList();
+    }
+
+    @Override
+    public VatsimFlightsHistory flightsHistory(String vatsimId, Integer offset) {
+        return vatsimAdapter.flightHistory(vatsimId, offset);
     }
 }

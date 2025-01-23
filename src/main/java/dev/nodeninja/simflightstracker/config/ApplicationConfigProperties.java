@@ -25,6 +25,7 @@ public class ApplicationConfigProperties {
             private String v2;
             private String v3;
             private String metar;
+            private String core;
         }
     }
 

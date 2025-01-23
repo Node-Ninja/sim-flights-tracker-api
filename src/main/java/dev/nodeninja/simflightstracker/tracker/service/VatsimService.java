@@ -6,6 +6,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.Flight;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 
 import java.util.List;
 
@@ -55,4 +56,12 @@ public interface VatsimService {
      * @return List of transceivers
      */
     List<VatsimTransceiver> transceivers();
+
+    /**
+     *
+     * @param vatsimId Vatsim ID to fetch flights history for
+     * @param offset Offset integer used for pagination/paging
+     * @return A List of flight history items, with count to determine paging
+     */
+    VatsimFlightsHistory flightsHistory(String vatsimId, Integer offset);
 }
