@@ -32,4 +32,4 @@ sft:
 
 logging:
   level:
-    root: info
+    root: trace
