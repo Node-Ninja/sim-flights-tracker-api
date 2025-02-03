@@ -32,4 +32,4 @@ sft:
 
 logging:
   level:
-    root: error
+    root: ERROR
