@@ -16,6 +16,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(appCheckInterceptor)
-                .addPathPatterns("/api/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/index.html",
+                        "/play.png",
+                        "/app-ads.txt",
+                        "/sft_transparent.png",
+                        "/airlines/**",
+                        "/apple.svg",
+                        "/"
+                );
     }
 }

@@ -32,4 +32,5 @@ sft:
 
 logging:
   level:
-    root: ERROR
+    root: INFO
+    org.springframework: INFO
