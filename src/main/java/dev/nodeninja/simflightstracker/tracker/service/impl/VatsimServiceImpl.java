@@ -1,99 +1,152 @@
 package dev.nodeninja.simflightstracker.tracker.service.impl;
 
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.EventSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
-import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.VatsimAdapter;
+import dev.nodeninja.simflightstracker.api.v2.model.*;
+import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
+import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class VatsimServiceImpl implements VatsimService {
-    private final VatsimAdapter vatsimAdapter;
     private final TrackerMapper mapper;
+    private final VatsimClient vatsimClient;
+
+    private final ApplicationConfigProperties configProps;
 
 
     @Override
     public VatsimLiveData vatsimLiveData() {
-        var response = vatsimAdapter.liveData();
+        try {
+            var response = vatsimClient.getLiveData();
 
-        return VatsimLiveData.builder()
-                .flights(response.getPilots().stream().map(mapper::vatsimFlightToSummary).collect(Collectors.toList()))
-                .controllers(response.getControllers().stream().map(mapper::vatsimAtcToSummary).collect(Collectors.toList()))
-                .build();
+            return VatsimLiveData.builder()
+                    .flights(response.getPilots().stream().map(mapper::vatsimFlightToSummary).collect(Collectors.toList()))
+                    .controllers(response.getControllers().stream().map(mapper::vatsimAtcToSummary).collect(Collectors.toList()))
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Flight flightDetails(String callSign) {
-        var response = vatsimAdapter.liveData();
-        var flights = response.getPilots();
-        var foundFlight = flights.stream()
-                .filter(flight -> callSign.equals(flight.getCallsign()))
-                .findFirst()
-                .orElse(null);
+        try {
+            var response = vatsimClient.getLiveData();
 
-        if (foundFlight == null) { return null; }
+            var flights = response.getPilots();
+            var foundFlight = flights.stream()
+                    .filter(flight -> callSign.equals(flight.getCallsign()))
+                    .findFirst()
+                    .orElse(null);
 
-        return mapper.vatsimFlightToGeneric(foundFlight);
+            if (foundFlight == null) { return null; }
+
+            return mapper.vatsimFlightToGeneric(foundFlight);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public AirTrafficController atcDetails(String callSign) {
-        var response = vatsimAdapter.liveData();
-        var controllers = response.getControllers();
+        try {
+            var response = vatsimClient.getLiveData();
 
-        var foundController = controllers.stream().filter(controller -> controller.getCallsign().equals(callSign)).findFirst().orElse(null);
+            var controllers = response.getControllers();
 
-        if (foundController == null) { return null; }
+            var foundController = controllers.stream().filter(controller -> controller.getCallsign().equals(callSign)).findFirst().orElse(null);
 
-        return mapper.vatsimControllerToGeneric(foundController);
+            if (foundController == null) { return null; }
+
+            return mapper.vatsimControllerToGeneric(foundController);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public String metarByAirportIcaoId(String icaoId) {
-        return vatsimAdapter.metarByIcaoId(icaoId);
+        try {
+            URI endpoint = URI.create(configProps.getVatsim().getHost().getMetar()  + String.format("/%s", icaoId));
+
+            return vatsimClient.metarByIcaoId(endpoint);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<EventSummary> events() {
-        var response = vatsimAdapter.allEvents();
-        return response.getData().stream().map(mapper::vatsimEventToSummary).toList();
+        URI endpoint = URI.create(configProps.getVatsim().getHost().getV2() + "/events/latest");
+
+        try {
+            var response = vatsimClient.getAllEvents(endpoint);
+            return response.getData().stream().map(mapper::vatsimEventToSummary).toList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public VatsimEvent eventDetails(String eventId) {
-        var response = vatsimAdapter.eventDetails(eventId);
+        URI endpoint = URI.create(configProps.getVatsim().getHost().getV2() + String.format("/events/view/%s", eventId));
 
-        return response.getData();
+        try {
+            var response = vatsimClient.eventDetails(endpoint);
+
+            return response.getData();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<VatsimTransceiver> transceivers() {
-        var allowedStations = List.of("DEL", "GND", "TWR", "APP", "CTR");
+        try {
+            var allowedStations = List.of("DEL", "GND", "TWR", "APP", "DEP", "CTR");
 
-        var response = vatsimAdapter.allTransceivers();
+            var response = vatsimClient.getAllTransceivers();
 
-        return response
-                .stream()
-                .filter(ts1 -> allowedStations.contains(
-                        StringUtils.right(
-                                ts1.getCallsign(),
-                                3))).toList();
+            return response
+                    .stream()
+                    .filter(ts1 -> allowedStations.contains(
+                            StringUtils.right(
+                                    ts1.getCallsign(),
+                                    3))).toList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public VatsimFlightsHistory flightsHistory(String vatsimId, Integer offset) {
-        return vatsimAdapter.flightHistory(vatsimId, offset);
+        URI endpoint = URI.create(configProps.getVatsim().getHost().getCore()  + "/members/" + vatsimId + "/history?limit=" + 50);
+
+        try {
+            return vatsimClient.getFlightsHistory(endpoint);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<FlightPlanHistoryItem> flightPlanHistory(String vatsimId) {
+        URI endpoint = URI.create(configProps.getVatsim().getHost().getCore()  + "/members/" + vatsimId + "/flightplans");
+
+        try {
+            return vatsimClient.flightPlanHistory(endpoint);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -18,7 +18,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(appCheckInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
                         "/index.html",
+                        "/privacy.html",
                         "/play.png",
                         "/app-ads.txt",
                         "/sft_transparent.png",

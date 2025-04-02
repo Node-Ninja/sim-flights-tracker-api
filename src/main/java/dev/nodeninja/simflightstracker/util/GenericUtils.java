@@ -24,6 +24,9 @@ public class GenericUtils {
         if (StringUtils.contains(callsign, "_TWR")) {
             controllerType = ControllerType.TOWER;
         }
+        if (StringUtils.contains(callsign, "_DEP")) {
+            controllerType = ControllerType.DEPARTURE;
+        }
         if (StringUtils.contains(callsign, "_APP")) {
             controllerType = ControllerType.APPROACH;
         }

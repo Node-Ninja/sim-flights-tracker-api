@@ -1,12 +1,10 @@
 package dev.nodeninja.simflightstracker.tracker.service.impl;
 
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.Aircraft;
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.tracker.adapter.ivao.IvaoAdapter;
+import dev.nodeninja.simflightstracker.api.v2.model.*;
+import dev.nodeninja.simflightstracker.tracker.external.IvaoClient;
+import dev.nodeninja.simflightstracker.tracker.http.client.AuthenticatedRestClient;
+import dev.nodeninja.simflightstracker.tracker.http.model.IDProvider;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.IvaoLiveData;
 import dev.nodeninja.simflightstracker.tracker.service.IvaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,58 +16,91 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class IvaoServiceImpl implements IvaoService {
-    private final IvaoAdapter ivaoAdapter;
     private final TrackerMapper mapper;
+    private final AuthenticatedRestClient authenticatedRestClient;
+    private final IvaoClient ivaoClient;
 
     @Override
     public IvaoLiveData liveData() {
-        var flights = ivaoAdapter.flights();
-        var controllers = ivaoAdapter.controllers();
 
-        var summarizedFlights = flights.stream().map(mapper::ivaoFlightToSummary).toList();
-        var summarizedControllers = controllers.stream().map(mapper::ivaoAtcToSummary).toList();
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+           try {
+               var flights = ivaoClient.getFlights(httpHeaders);
+               var controllers = ivaoClient.getControllers(httpHeaders);
 
-        return IvaoLiveData.builder()
-                .flights(summarizedFlights)
-                .controllers(summarizedControllers)
-                .build();
+               var summarizedFlights = flights.stream().map(mapper::ivaoFlightToSummary).toList();
+               var summarizedControllers = controllers.stream().map(mapper::ivaoAtcToSummary).toList();
+
+               return IvaoLiveData.builder()
+                       .flights(summarizedFlights)
+                       .controllers(summarizedControllers)
+                       .build();
+
+           } catch (Exception e) {
+               throw new RuntimeException(e);
+           }
+        });
     }
 
     @Override
-    public Flight flightDetails(String callsign) {
-        var flights = ivaoAdapter.flights();
+    public Flight flightDetails(String callSign) {
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+            try {
+                var flights = ivaoClient.getFlights(httpHeaders);
 
-        var foundFlight = flights.stream().filter(flight -> flight.getCallsign().equals(callsign)).findFirst().orElse(null);
+                var foundFlight = flights.stream().filter(flight -> flight.getCallsign().equals(callSign)).findFirst().orElse(null);
 
-        if (foundFlight == null) { return null; }
+                if (foundFlight == null) { return null; }
 
-        return mapper.ivaoFlightToGeneric(foundFlight);
+                return mapper.ivaoFlightToGeneric(foundFlight);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
-    public AirTrafficController atcDetails(String callsign) {
-        var controllers = ivaoAdapter.controllers();
+    public AirTrafficController atcDetails(String callSign) {
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+            try {
+                var controllers = ivaoClient.getControllers(httpHeaders);
 
-        var foundController = controllers.stream().filter(controller -> controller.getCallsign().equals(callsign)).findFirst().orElse(null);
+                var foundController = controllers.stream().filter(controller -> controller.getCallsign().equals(callSign)).findFirst().orElse(null);
 
-        if (foundController == null) { return null; }
+                if (foundController == null) { return null; }
 
-        return mapper.ivaoControllerToGeneric(foundController);
+                return mapper.ivaoControllerToGeneric(foundController);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public List<FlightSummary> getFlights() {
-        var flights = ivaoAdapter.flights();
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+           try {
+               var flights = ivaoClient.getFlights(httpHeaders);
 
-        return flights.stream().map(mapper::ivaoFlightToSummary).toList();
+               return flights.stream().map(mapper::ivaoFlightToSummary).toList();
+           } catch (Exception e) {
+               throw new RuntimeException(e);
+           }
+        });
     }
 
     @Override
     public Aircraft aircraftDetails(String aircraftId) {
-        var aircraftDetails = ivaoAdapter.aircraftDetails(aircraftId);
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+           try {
+               var aircraftDetails = ivaoClient.getAircraftDetails(httpHeaders, aircraftId);
 
-        if (aircraftDetails == null) { return null; }
+               if (aircraftDetails == null) { return null; }
 
-        return mapper.ivaoAircraftToGeneric(aircraftDetails);
+               return mapper.ivaoAircraftToGeneric(aircraftDetails);
+           } catch (Exception e) {
+               throw new RuntimeException(e);
+           }
+        });
     }
 }

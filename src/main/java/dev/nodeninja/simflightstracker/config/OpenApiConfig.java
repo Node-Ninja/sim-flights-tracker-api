@@ -19,8 +19,8 @@ public class OpenApiConfig {
                         "Bearer Authentication", jwtSecurityScheme()
                 ))
                 .info(new Info()
-                        .title("SimFlight Tracker")
-                        .description("SFT APIs"));
+                        .title("Sim Flight Tracker")
+                        .description("Sim Flights Tracker - API"));
     }
 
     public SecurityScheme jwtSecurityScheme() {

@@ -17,6 +17,7 @@ public class ApplicationConfigProperties {
     @NoArgsConstructor
     public static class VatsimConfigProperties {
         private VatsimHostProperties host = new VatsimHostProperties();
+        private VatsimOAuthProperties oAuth = new VatsimOAuthProperties();
 
         @Data
         @AllArgsConstructor
@@ -27,6 +28,18 @@ public class ApplicationConfigProperties {
             private String metar;
             private String core;
         }
+
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class VatsimOAuthProperties {
+            private String clientId;
+            private String clientSecret;
+            private String grantType;
+            private String scope;
+            private String tokenUri;
+        }
+
     }
 
     @Data

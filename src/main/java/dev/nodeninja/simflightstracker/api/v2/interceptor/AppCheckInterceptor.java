@@ -34,6 +34,7 @@ public class AppCheckInterceptor implements HandlerInterceptor {
     @SuppressWarnings("null")
     @Override
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
+
         String appCheckToken = request.getHeader("Authorization");
         var firebaseProjectName = configProps.getFirebase().getProjectName();
         var firebaseProjectNumber = configProps.getFirebase().getProjectNumber();
@@ -75,10 +76,10 @@ public class AppCheckInterceptor implements HandlerInterceptor {
 
             return true;
         } catch (SignatureVerificationException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
     }

@@ -1,5 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.adapter.vatsim;
 
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimDataApiResponse;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
@@ -21,4 +22,6 @@ public interface VatsimAdapter {
     List<VatsimTransceiver> allTransceivers() throws HttpClientErrorException;
 
     VatsimFlightsHistory flightHistory(String vatsimId, Integer offset) throws HttpClientErrorException;
+
+    List<FlightPlanHistoryItem> flightPlanHistory(String vatsimId) throws HttpClientErrorException;
 }

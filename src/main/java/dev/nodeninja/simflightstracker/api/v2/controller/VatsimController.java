@@ -6,6 +6,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.EventSummary;
 import dev.nodeninja.simflightstracker.api.v2.model.Flight;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
@@ -63,5 +64,10 @@ public class VatsimController {
     @PostMapping("/history/flights/{vatsimId}/{offset}")
     public VatsimFlightsHistory getFlightsHistory(@NotNull @PathVariable String vatsimId, @NotNull @PathVariable int offset) {
         return vatsimService.flightsHistory(vatsimId, offset);
+    }
+
+    @PostMapping("/history/plans/{vatsimId}")
+    public List<FlightPlanHistoryItem> getFlightsHistory(@NotNull @PathVariable String vatsimId) {
+        return vatsimService.flightPlanHistory(vatsimId);
     }
 }

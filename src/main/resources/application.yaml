@@ -3,8 +3,6 @@ spring:
     mongodb:
       database: simflightstracker
       uri: mongodb+srv://apps:${MONGO_PASS}@sft.lmbdj.mongodb.net
-  codec:
-    max-in-memory-size: 4MB
 
 sft:
   ivao:
@@ -19,6 +17,12 @@ sft:
 
 
   vatsim:
+    oauth:
+      client-id: ${VATSIM_CID}
+      client-secret: ${VATSIM_CST}
+      grant-type: client_credentials
+      scope: openid
+      token-uri: https://data.vatsim.net/v2/oauth/token
     host:
       v2: https://my.vatsim.net/api/v2
       v3: https://data.vatsim.net/v3

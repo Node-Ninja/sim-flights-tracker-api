@@ -4,6 +4,7 @@ public enum ControllerType {
     DELIVERY,
     GROUND,
     TOWER,
+    DEPARTURE,
     APPROACH,
     CENTER,
     OBSERVER,
