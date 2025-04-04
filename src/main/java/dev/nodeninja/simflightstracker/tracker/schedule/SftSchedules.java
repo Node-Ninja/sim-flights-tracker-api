@@ -17,8 +17,6 @@ public class SftSchedules {
 
     @Scheduled(fixedRateString = "${sft.timings.vatsim-data-delay}")
     public void refreshVatsimLiveData() {
-        log.info(">>>>>>>>>>>>> Refreshing vatsim live data");
-
         try {
             VatsimDataApiResponse vatsimLiveData = vatsimClient.getLiveData();
 
