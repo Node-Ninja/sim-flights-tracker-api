@@ -4,6 +4,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
+import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
 import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class VatsimServiceImpl implements VatsimService {
     private final TrackerMapper mapper;
     private final VatsimClient vatsimClient;
+    private final VatsimLiveDataCache vatsimLiveDataCache;
 
     private final ApplicationConfigProperties configProps;
 
@@ -27,7 +29,7 @@ public class VatsimServiceImpl implements VatsimService {
     @Override
     public VatsimLiveData vatsimLiveData() {
         try {
-            var response = vatsimClient.getLiveData();
+            var response = vatsimLiveDataCache.getVatsimLiveData();
 
             return VatsimLiveData.builder()
                     .flights(response.getPilots().stream().map(mapper::vatsimFlightToSummary).collect(Collectors.toList()))
@@ -41,7 +43,7 @@ public class VatsimServiceImpl implements VatsimService {
     @Override
     public Flight flightDetails(String callSign) {
         try {
-            var response = vatsimClient.getLiveData();
+            var response = vatsimLiveDataCache.getVatsimLiveData();
 
             var flights = response.getPilots();
             var foundFlight = flights.stream()
@@ -60,7 +62,7 @@ public class VatsimServiceImpl implements VatsimService {
     @Override
     public AirTrafficController atcDetails(String callSign) {
         try {
-            var response = vatsimClient.getLiveData();
+            var response = vatsimLiveDataCache.getVatsimLiveData();
 
             var controllers = response.getControllers();
 

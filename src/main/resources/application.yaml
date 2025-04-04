@@ -34,6 +34,9 @@ sft:
     project-number: ${FIREBASE_PROJECT_NAME}
     app-check-jwk: https://firebaseappcheck.googleapis.com/v1/jwks
 
+  timings:
+    vatsim-data-delay: "PT20S"
+
 logging:
   level:
     root: INFO
