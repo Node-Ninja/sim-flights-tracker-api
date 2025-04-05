@@ -60,8 +60,6 @@ public class AuthenticatedRestClient {
             case NAVIGRAPH -> hasTokenExpired(navigraphToken);
         };
 
-        log.info("should refresh token? {}", shouldRefresh);
-
         if (shouldRefresh || ivaoToken == null) {
             log.info("Getting new authentication token");
 
@@ -80,8 +78,6 @@ public class AuthenticatedRestClient {
 
                 if (StringUtils.isNotBlank(authData.getAccessToken())) {
                     setToken(authData.getAccessToken(), provider);
-
-                    log.info("Successfully fetched authentication token");
 
                     return authData.getAccessToken();
                 } else {
@@ -112,7 +108,7 @@ public class AuthenticatedRestClient {
         if (StringUtils.isNotBlank(token)) {
             DecodedJWT jwt = JWT.decode(token);
 
-            return jwt.getExpiresAt().before(new Date(System.currentTimeMillis() - (5 * 60 * 1000)));
+            return jwt.getExpiresAt().before(new Date(System.currentTimeMillis() - 300000));
         }
 
         return true;

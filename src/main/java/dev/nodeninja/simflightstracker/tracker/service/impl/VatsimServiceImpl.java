@@ -2,6 +2,7 @@ package dev.nodeninja.simflightstracker.tracker.service.impl;
 
 import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
+import dev.nodeninja.simflightstracker.exceptions.BusinessException;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
@@ -10,6 +11,7 @@ import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -36,7 +38,10 @@ public class VatsimServiceImpl implements VatsimService {
                     .controllers(response.getControllers().stream().map(mapper::vatsimAtcToSummary).collect(Collectors.toList()))
                     .build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim live data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -55,7 +60,10 @@ public class VatsimServiceImpl implements VatsimService {
 
             return mapper.vatsimFlightToGeneric(foundFlight);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim flight data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -72,7 +80,10 @@ public class VatsimServiceImpl implements VatsimService {
 
             return mapper.vatsimControllerToGeneric(foundController);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim controller data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -83,7 +94,10 @@ public class VatsimServiceImpl implements VatsimService {
 
             return vatsimClient.metarByIcaoId(endpoint);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim metar data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -95,7 +109,10 @@ public class VatsimServiceImpl implements VatsimService {
             var response = vatsimClient.getAllEvents(endpoint);
             return response.getData().stream().map(mapper::vatsimEventToSummary).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim events data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -108,7 +125,10 @@ public class VatsimServiceImpl implements VatsimService {
 
             return response.getData();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim event data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -126,7 +146,10 @@ public class VatsimServiceImpl implements VatsimService {
                                     ts1.getCallsign(),
                                     3))).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim transceivers data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -137,7 +160,10 @@ public class VatsimServiceImpl implements VatsimService {
         try {
             return vatsimClient.getFlightsHistory(endpoint);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim flight history data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 
@@ -148,7 +174,10 @@ public class VatsimServiceImpl implements VatsimService {
         try {
             return vatsimClient.flightPlanHistory(endpoint);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(
+                    "Could not get Vatsim flight plan history data",
+                    "LIVE_DATA_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
         }
     }
 }
