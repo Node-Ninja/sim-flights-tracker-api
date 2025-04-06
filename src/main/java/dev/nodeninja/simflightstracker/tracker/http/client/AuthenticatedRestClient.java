@@ -108,7 +108,7 @@ public class AuthenticatedRestClient {
         if (StringUtils.isNotBlank(token)) {
             DecodedJWT jwt = JWT.decode(token);
 
-            return jwt.getExpiresAt().before(new Date(System.currentTimeMillis() - 300000));
+            return jwt.getExpiresAt().before(new Date(System.currentTimeMillis() + 120000));
         }
 
         return true;
