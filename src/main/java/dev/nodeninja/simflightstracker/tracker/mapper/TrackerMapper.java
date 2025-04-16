@@ -1,14 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.mapper;
 
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.Aircraft;
-import dev.nodeninja.simflightstracker.api.v2.model.AtcSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.EventSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightPlan;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightPlanSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
+import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.ivao.model.AircraftDetailsResponse;
 import dev.nodeninja.simflightstracker.tracker.adapter.ivao.model.IvaoAtc;
 import dev.nodeninja.simflightstracker.tracker.adapter.ivao.model.IvaoFlight;
@@ -16,6 +8,9 @@ import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimAtc;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlight;
 import dev.nodeninja.simflightstracker.util.GenericUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TrackerMapper {
@@ -194,5 +189,38 @@ public class TrackerMapper {
                 .numberEngines(aircraft.getNumberEngines())
                 .isMilitary(aircraft.getIsMilitary())
                 .build();
+    }
+
+    public EventSummary ivaoEventToSummary(IvaoEvent event) {
+        return EventSummary.builder()
+                .name(event.getTitle())
+                .startTime(event.getStartDate())
+                .endTime(event.getEndDate())
+                .id(event.getId())
+                .poster(event.getImageUrl())
+                .build();
+    }
+
+//    public EventDetails ivaoEventToDetails(IvaoEvent event) {}
+    public EventDetails ivaoEventToDetails(IvaoEvent event) {
+        return EventDetails.builder()
+                .id(event.getId())
+                .type(event.getEventType())
+                .name(event.getTitle())
+                .link(event.getInfoUrl())
+                .startTime(event.getStartDate())
+                .endTime(event.getEndDate())
+                .shortDescription(event.getDescription())
+                .description(event.getDescription())
+                .banner(event.getImageUrl())
+                .organisers(List.of())
+                .routes(List.of())
+                .airports(event.getAirports().stream().map(
+                        airport -> EventDetails.EventAirport.builder()
+                                .icao(airport)
+                                .build()
+                ).collect(Collectors.toList()))
+                .build();
+
     }
 }

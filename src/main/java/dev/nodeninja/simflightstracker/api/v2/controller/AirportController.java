@@ -5,6 +5,7 @@ import dev.nodeninja.simflightstracker.tracker.service.AirportService;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import dev.nodeninja.simflightstracker.tracker.service.impl.AirportServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +18,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v2/airport")
 public class AirportController {
     private final AirportService airportService;
-
-    public AirportController(AirportServiceImpl airportService, VatsimService vatsimService) {
-        this.airportService = airportService;
-    }
 
     @Operation(
             summary = "Get airport details",

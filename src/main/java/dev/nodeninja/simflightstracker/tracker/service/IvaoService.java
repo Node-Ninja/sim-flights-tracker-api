@@ -1,10 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.service;
 
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.Aircraft;
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.api.v2.model.FlightSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.IvaoLiveData;
+import dev.nodeninja.simflightstracker.api.v2.model.*;
 
 import java.util.List;
 
@@ -41,4 +37,17 @@ public interface IvaoService {
      * @return Aircraft details
      */
     Aircraft aircraftDetails(String aircraftId);
+
+    /**
+     * Get latest Ivao events
+     * @return List<IvaoEvent> List of Ivao Events
+     */
+    List<EventSummary> events();
+
+    /**
+     * Get Event details
+     * @param eventId Event ID to get details for
+     * @return IvaoEvent Ivao event details
+     */
+    EventDetails eventDetails(String eventId);
 }

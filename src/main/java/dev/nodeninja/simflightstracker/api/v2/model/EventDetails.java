@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -15,8 +16,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class VatsimEvent {
+public class EventDetails {
     private Integer id;
     private String type;
     private String name;
@@ -26,15 +28,15 @@ public class VatsimEvent {
     private String shortDescription;
     private String description;
     private String banner;
-    private List<VatsimEventOrganiser> organisers;
-    private List<VatsimEventRoute> routes;
-    private List<VatsimEventAirport> airports;
+    private List<EventOrganiser> organisers;
+    private List<EventRoute> routes;
+    private List<EventAirport> airports;
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class VatsimEventAirport {
+    public static class EventAirport {
         private String icao;
     }
 
@@ -42,7 +44,7 @@ public class VatsimEvent {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class VatsimEventOrganiser {
+    public static class EventOrganiser {
         private String region;
         @Nullable
         private String division;
@@ -56,7 +58,7 @@ public class VatsimEvent {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class VatsimEventRoute {
+    public static class EventRoute {
         private String departure;
         private String arrival;
         private String route;

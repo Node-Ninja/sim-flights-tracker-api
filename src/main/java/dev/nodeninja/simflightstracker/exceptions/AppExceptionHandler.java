@@ -16,11 +16,11 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(value = BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 ErrorResponse.builder()
-                        .statusCode(HttpStatus.BAD_GATEWAY)
+                        .statusCode(HttpStatus.BAD_REQUEST)
                         .message(ex.getMessage())
-                        .errorCode("FAIL_CONFLICT")
+                        .errorCode("FAILED_REQUEST")
                         .timestamp(LocalDateTime.now())
                         .build()
         );

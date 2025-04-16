@@ -113,4 +113,39 @@ public class IvaoServiceImpl implements IvaoService {
            }
         });
     }
+
+    @Override
+    public List<EventSummary> events() {
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+            try {
+                var eventsResponse = ivaoClient.getEvents(httpHeaders);
+
+                return eventsResponse.stream().map(mapper::ivaoEventToSummary).toList();
+
+            } catch (Exception e) {
+                throw new BusinessException(
+                        "Could not get Ivao events data",
+                        "GET_EVENTS_ERROR",
+                        HttpStatus.SC_BAD_REQUEST);
+            }
+        });
+    }
+
+    @Override
+    public EventDetails eventDetails(String eventId) {
+        return authenticatedRestClient.requestWithRetry(IDProvider.IVAO, httpHeaders -> {
+           try {
+
+               var ivaoEventDetails = ivaoClient.getEventDetails(httpHeaders, eventId);
+
+               return mapper.ivaoEventToDetails(ivaoEventDetails);
+
+           } catch (Exception e) {
+               throw new BusinessException(
+                       "Could not get Ivao event data",
+                       "GET_EVENTS_ERROR",
+                       HttpStatus.SC_BAD_REQUEST);
+           }
+        });
+    }
 }

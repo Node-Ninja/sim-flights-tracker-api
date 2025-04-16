@@ -67,7 +67,7 @@ public class RestClientConfig {
     public IvaoClient ivaoClient() {
         RestClient restClient = RestClient.builder()
                 .requestFactory(getRequestFactory(Duration.ofSeconds(60)))
-                .baseUrl(configProps.getIvao().getHost().getV2())
+                .baseUrl(configProps.getIvao().getHost())
                 .build();
 
         final RestClientAdapter restClientAdapter = RestClientAdapter.create(restClient);

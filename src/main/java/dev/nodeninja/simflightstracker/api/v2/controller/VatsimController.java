@@ -1,15 +1,11 @@
 package dev.nodeninja.simflightstracker.api.v2.controller;
 
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.EventSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
+import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v2/vatsim")
 public class VatsimController {
     private final VatsimService vatsimService;
-
-    public VatsimController(VatsimService vatsimService) {
-        this.vatsimService = vatsimService;
-    }
 
     @PostMapping("/live-data")
     public VatsimLiveData getLiveData() {

@@ -1,11 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.service;
 
-import dev.nodeninja.simflightstracker.api.v2.model.AirTrafficController;
-import dev.nodeninja.simflightstracker.api.v2.model.EventSummary;
-import dev.nodeninja.simflightstracker.api.v2.model.Flight;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
-import dev.nodeninja.simflightstracker.api.v2.model.VatsimLiveData;
+import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 

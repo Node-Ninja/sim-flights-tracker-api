@@ -12,8 +12,7 @@ sft:
       grant-type: client_credentials
       scope: openid
       token-uri: https://api.ivao.aero/v2/oauth/token
-    host:
-      v2: https://api.ivao.aero/v2
+    host: https://api.ivao.aero
 
 
   vatsim:
