@@ -20,8 +20,28 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
+- stage: Compile
+  displayName: Compile Java App
+  jobs:
+  - job:
+    displayName: Maven Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Maven@4
+      inputs:
+        azureSubscription: 'Main Subscription(98a0acc1-cf43-4cf6-8485-208999a388a6)'
+        mavenPomFile: 'pom.xml'
+        goals: 'clean package'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
 - stage: Build
   displayName: Build and push stage
+  dependsOn: Compile
   jobs:
   - job: Build
     displayName: Build
