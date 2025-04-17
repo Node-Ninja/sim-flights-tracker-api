@@ -28,10 +28,9 @@ public class SftSchedules {
         try {
             VatsimDataApiResponse vatsimLiveData = vatsimClient.getLiveData();
 
-            //  update cache with refreshed live data;
             vatsimLiveDataCache.updateCache(vatsimLiveData);
         } catch (Exception e) {
-            // Do nothing;
+            log.error("Could not refresh vatsim live data :: {}", e.getMessage());
         }
     }
 
@@ -48,7 +47,7 @@ public class SftSchedules {
                 return true;
             });
         } catch (Exception e) {
-            //  DO Nothing
+            log.error("Could not refresh ivao live data :: {}", e.getMessage());
         }
     }
 }
