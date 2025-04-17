@@ -25,8 +25,6 @@ stages:
   jobs:
   - job:
     displayName: Maven Build
-    pool:
-      vmImage: $(vmImageName)
     steps:
     - task: Maven@4
       inputs:
@@ -35,6 +33,7 @@ stages:
         goals: 'clean package'
         publishJUnitResults: false
         javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17'
         mavenVersionOption: 'Default'
         mavenAuthenticateFeed: false
         effectivePomSkip: false
