@@ -20,13 +20,16 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Compile
-  displayName: Compile Java App
+- stage: Build
+  displayName: Compile Build and Push
   jobs:
-  - job:
-    displayName: Maven Build
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
     steps:
     - task: Maven@4
+      displayName: Maven compile java app
       inputs:
         azureSubscription: 'Main Subscription(98a0acc1-cf43-4cf6-8485-208999a388a6)'
         mavenPomFile: 'pom.xml'
@@ -38,15 +41,6 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-- stage: Build
-  displayName: Build and push stage
-  dependsOn: Compile
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
