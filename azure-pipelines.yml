@@ -63,7 +63,7 @@ stages:
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
-          $(APP_VERSION)
+          $(VERSION)
 - stage: Deploy
   dependsOn: Build
   displayName: Deploy to App Services
