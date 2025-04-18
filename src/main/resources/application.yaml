@@ -36,7 +36,7 @@ sft:
   timings:
     vatsim-data-delay: "PT20S"
     ivao-data-delay: "PT20S"
-  app-check-off: false
+  app-check-off: true
 
 server:
   port: 8080
