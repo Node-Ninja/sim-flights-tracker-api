@@ -84,4 +84,3 @@ stages:
                 azureSubscription: 'Main Subscription(98a0acc1-cf43-4cf6-8485-208999a388a6)'
                 appName: 'sim-flights-tracker'
                 containers: '$(containerRegistry)/$(imageRepository):$(APP_VERSION)'
-
