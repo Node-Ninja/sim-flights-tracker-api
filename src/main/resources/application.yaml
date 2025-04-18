@@ -38,6 +38,9 @@ sft:
     ivao-data-delay: "PT20S"
   app-check-off: false
 
+server:
+  port: 8080
+
 logging:
   level:
     root: INFO
