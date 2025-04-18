@@ -5,14 +5,12 @@ LABEL author="NodeNinja"
 LABEL version="2.2.1"
 LABEL description="Sim Flights Tracker API"
 
-ARG APP_VERSION="2.2.1"
-
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the jar file into the container
 # Replace 'target/myapp.jar' with your actual jar file path
-COPY target/simflightstracker-${APP_VERSION}.jar sft.jar
+COPY target/*.jar sft.jar
 
 # Expose the port your Spring Boot app listens on
 EXPOSE 8080
