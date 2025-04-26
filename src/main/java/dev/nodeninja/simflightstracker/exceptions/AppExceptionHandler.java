@@ -40,7 +40,7 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        log.error("Generic exception handled :: ", ex);
+        log.error("Generic exception handled :: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 ErrorResponse.builder()
                         .statusCode(HttpStatus.BAD_REQUEST)
