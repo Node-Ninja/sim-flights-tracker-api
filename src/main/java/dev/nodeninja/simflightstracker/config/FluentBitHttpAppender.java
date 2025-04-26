@@ -29,8 +29,7 @@ public class FluentBitHttpAppender extends AppenderBase<ILoggingEvent> {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             HttpEntity<String> request = new HttpEntity<>(payload, headers);
-            var res = restTemplate.postForEntity(fluentBitUrl, request, String.class);
-            System.out.println(res.getStatusCode());
+            restTemplate.postForEntity(fluentBitUrl, request, String.class);
 
         } catch (Exception e) {
             addError("Failed to send log to Fluent Bit", e);
