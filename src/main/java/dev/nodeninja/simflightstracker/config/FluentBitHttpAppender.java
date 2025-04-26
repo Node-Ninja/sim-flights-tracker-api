@@ -7,6 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 public class FluentBitHttpAppender extends AppenderBase<ILoggingEvent> {
 
     private RestTemplate restTemplate;
@@ -40,12 +44,12 @@ public class FluentBitHttpAppender extends AppenderBase<ILoggingEvent> {
         String message = eventObject.getFormattedMessage();
         String level = eventObject.getLevel().toString();
         String loggerName = eventObject.getLoggerName();
-        long timestamp = eventObject.getTimeStamp();
+        OffsetDateTime timestamp = OffsetDateTime.now();
 
         return String.format(
-                "{\"tag\": \"%s\", \"time\": %d, \"level\": \"%s\", \"logger\": \"%s\", \"message\": \"%s\"}",
+                "{\"tag\": \"%s\", \"time\": \"%s\", \"level\": \"%s\", \"logger\": \"%s\", \"message\": \"%s\"}",
                 logTag,
-                timestamp,
+                timestamp.toString(),
                 escapeJson(level),
                 escapeJson(loggerName),
                 escapeJson(message)
