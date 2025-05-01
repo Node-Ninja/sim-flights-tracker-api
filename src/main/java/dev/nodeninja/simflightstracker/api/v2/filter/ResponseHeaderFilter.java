@@ -19,6 +19,9 @@ import java.io.IOException;
         "/api/v2/ivao/flights/*",
         "/api/v2/vatsim/atc/*",
         "/api/v2/ivao/atc/*",
+        "/api/v2/vatsim/transceivers",
+        "/api/v2/vatsim/events/*",
+        "/api/v2/ivao/events/*"
 })
 public class ResponseHeaderFilter implements Filter {
     @Override
