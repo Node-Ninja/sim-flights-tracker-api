@@ -8,8 +8,14 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <!-- Async wrapper -->
+    <appender name="ASYNC_FLUENT" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="FLUENT_BIT" />
+        <queueSize>5000</queueSize> <!-- Optional -->
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_FLUENT" />
         <appender-ref ref="CONSOLE" />
     </root>
 </configuration>
