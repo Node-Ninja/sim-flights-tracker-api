@@ -1,5 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.schedule;
 
+import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimDataApiResponse;
 import dev.nodeninja.simflightstracker.tracker.component.IvaoLiveDataCache;
 import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -27,8 +30,9 @@ public class SftSchedules {
     public void refreshVatsimLiveData() {
         try {
             VatsimDataApiResponse vatsimLiveData = vatsimClient.getLiveData();
+            List<VatsimTransceiver> vatsimTransceivers = vatsimClient.getAllTransceivers();
 
-            vatsimLiveDataCache.updateCache(vatsimLiveData);
+            vatsimLiveDataCache.updateCache(vatsimLiveData, vatsimTransceivers);
         } catch (Exception e) {
             log.error("Could not refresh vatsim live data :: {}", e.getMessage());
         }

@@ -137,7 +137,7 @@ public class VatsimServiceImpl implements VatsimService {
         try {
             var allowedStations = List.of("DEL", "GND", "TWR", "APP", "DEP", "CTR");
 
-            var response = vatsimClient.getAllTransceivers();
+            var response = vatsimLiveDataCache.getVatsimTransceivers();
 
             return response
                     .stream()
