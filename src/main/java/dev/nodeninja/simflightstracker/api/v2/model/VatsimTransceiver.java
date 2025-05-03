@@ -22,7 +22,7 @@ public class VatsimTransceiver {
     private static class TransceiverItem {
         private Double heightMslM;
         private Double heightAglM;
-        private Integer frequency;
+        private Long frequency;
         private Double lonDeg;
         private Double latDeg;
         private Integer id;
