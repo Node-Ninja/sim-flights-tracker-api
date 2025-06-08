@@ -1,0 +1,45 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongo-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+
+  spring-app:
+    image: nodeninja-f8c9bdgffpf6b5ga.azurecr.io/simflightstracker:2.6.0
+    container_name: sim-flights-tracker
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASS: ${MONGO_PASS}
+      MONGO_HOST: ${MONGO_HOST}
+      IVAO_CID: ${IVAO_CID}
+      IVAO_CST: ${IVAO_CST}
+      VATSIM_CID: ${VATSIM_CID}
+      VATSIM_CST: ${VATSIM_CST}
+      FIREBASE_PROJECT_NAME: ${FIREBASE_PROJECT_NAME}
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  mongo_data:
+
+networks:
+  backend:
+    driver: bridge

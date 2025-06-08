@@ -65,22 +65,3 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(LOCAL_APP_VERSION)
-- stage: Deploy
-  dependsOn: Build
-  displayName: Deployment
-  variables:
-    APP_VERSION: $[stageDependencies.Build.BuildImage.outputs['SetVersion.APP_VERSION']]
-  jobs:
-   - deployment: DeployToProd
-     displayName: "Deploy Container to App Service"
-     environment: production
-     strategy:
-      runOnce:
-        deploy:
-          steps:
-            - checkout: none
-            - task: AzureWebAppContainer@1
-              inputs:
-                azureSubscription: 'Main Subscription(98a0acc1-cf43-4cf6-8485-208999a388a6)'
-                appName: 'sim-flights-tracker'
-                containers: '$(containerRegistry)/$(imageRepository):$(APP_VERSION)'

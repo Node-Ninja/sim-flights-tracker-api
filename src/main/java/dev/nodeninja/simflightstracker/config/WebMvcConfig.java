@@ -27,6 +27,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                             "/privacy.html",
                             "/play.png",
                             "/app-ads.txt",
+                            "/robots.txt",
+                            "/favicon.ico",
                             "/sft_transparent.png",
                             "/airlines/**",
                             "/apple.svg",
