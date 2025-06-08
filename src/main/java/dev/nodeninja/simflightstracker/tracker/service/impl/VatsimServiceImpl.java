@@ -8,6 +8,7 @@ import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlight
 import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
 import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
+import dev.nodeninja.simflightstracker.tracker.repository.FlightTracksRepository;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ public class VatsimServiceImpl implements VatsimService {
     private final TrackerMapper mapper;
     private final VatsimClient vatsimClient;
     private final VatsimLiveDataCache vatsimLiveDataCache;
+    private final FlightTracksRepository flightTracksRepository;
 
     private final ApplicationConfigProperties configProps;
 
@@ -179,5 +181,10 @@ public class VatsimServiceImpl implements VatsimService {
                     "LIVE_DATA_ERROR",
                     HttpStatus.SC_BAD_REQUEST);
         }
+    }
+
+    @Override
+    public FlightTrack getFlightTrack(String callsign) {
+        return flightTracksRepository.findByCallsign(callsign);
     }
 }

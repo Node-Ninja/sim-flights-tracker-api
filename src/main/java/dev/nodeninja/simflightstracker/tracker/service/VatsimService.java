@@ -67,4 +67,6 @@ public interface VatsimService {
      * @return A List of flight plan history items
      */
     List<FlightPlanHistoryItem> flightPlanHistory(String vatsimId);
+
+    FlightTrack getFlightTrack(String callsign);
 }

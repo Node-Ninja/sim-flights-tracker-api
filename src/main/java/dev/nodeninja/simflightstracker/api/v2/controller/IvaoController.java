@@ -2,6 +2,7 @@ package dev.nodeninja.simflightstracker.api.v2.controller;
 
 import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.service.IvaoService;
+import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v2/ivao")
 public class IvaoController {
     private final IvaoService ivaoService;
+    private final TrackUpdaterService trackUpdaterService;
 
     @PostMapping("/live-data")
     public IvaoLiveData getLiveData() {
@@ -45,5 +47,10 @@ public class IvaoController {
     @PostMapping("/events/{eventId}")
     public EventDetails getEventDetails(@NotNull @PathVariable String eventId) {
         return ivaoService.eventDetails(eventId);
+    }
+
+    @PostMapping("/flights/{callSign}/track")
+    public FlightTrack getFlightTrack(@NotNull @PathVariable String callSign) {
+        return trackUpdaterService.getTrack(callSign, "ivao");
     }
 }
