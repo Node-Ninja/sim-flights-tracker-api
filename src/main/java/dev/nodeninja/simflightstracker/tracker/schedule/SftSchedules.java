@@ -73,19 +73,17 @@ public class SftSchedules {
             List<String> activeCallsigns = new ArrayList<>();
 
             for (VatsimFlight flight : vatsimFlights) {
-                if (flight.getGroundspeed() > 0) {
-                    String callsign = flight.getCallsign();
-                    activeCallsigns.add(callsign);
+                String callsign = flight.getCallsign();
+                activeCallsigns.add(callsign);
 
-                    LatLng point = LatLng.builder()
-                            .latitude(flight.getLatitude())
-                            .longitude(flight.getLongitude())
-                            .altitude(flight.getAltitude())
-                            .timestamp(System.currentTimeMillis())
-                            .build();
+                LatLng point = LatLng.builder()
+                        .latitude(flight.getLatitude())
+                        .longitude(flight.getLongitude())
+                        .altitude(flight.getAltitude())
+                        .timestamp(System.currentTimeMillis())
+                        .build();
 
-                    updateMap.put(callsign, point);
-                }
+                updateMap.put(callsign, point);
             }
 
             trackUpdaterService.updateTracks(updateMap, "vatsim");
@@ -100,21 +98,18 @@ public class SftSchedules {
                 var hasTrack = flight.getLastTrack() != null;
 
                 if (hasTrack) {
-                    var speed = flight.getLastTrack().getGroundSpeed();
 
-                    if (speed > 0) {
-                        String callsign = flight.getCallsign();
-                        activeCallsigns.add(callsign);
+                    String callsign = flight.getCallsign();
+                    activeCallsigns.add(callsign);
 
-                        LatLng point = LatLng.builder()
-                                .latitude(flight.getLastTrack().getLatitude())
-                                .longitude(flight.getLastTrack().getLongitude())
-                                .altitude(flight.getLastTrack().getAltitude())
-                                .timestamp(System.currentTimeMillis())
-                                .build();
+                    LatLng point = LatLng.builder()
+                            .latitude(flight.getLastTrack().getLatitude())
+                            .longitude(flight.getLastTrack().getLongitude())
+                            .altitude(flight.getLastTrack().getAltitude())
+                            .timestamp(System.currentTimeMillis())
+                            .build();
 
-                        updateMap.put(callsign, point);
-                    }
+                    updateMap.put(callsign, point);
                 }
             }
 
