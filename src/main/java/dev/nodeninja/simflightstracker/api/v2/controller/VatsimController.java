@@ -3,6 +3,7 @@ package dev.nodeninja.simflightstracker.api.v2.controller;
 import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimUserHours;
 import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
@@ -69,5 +70,10 @@ public class VatsimController {
     @PostMapping("/flights/{callSign}/track")
     public FlightTrack getFlightTrack(@NotNull @PathVariable String callSign) {
         return trackUpdaterService.getTrack(callSign, "vatsim");
+    }
+
+    @PostMapping("/history/hours/{vatsimId}")
+    public VatsimUserHours getUserHours(@NotNull @PathVariable String vatsimId) {
+        return vatsimService.getUserHours(vatsimId);
     }
 }

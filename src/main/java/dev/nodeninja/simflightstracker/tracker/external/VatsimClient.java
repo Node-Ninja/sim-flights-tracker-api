@@ -2,10 +2,7 @@ package dev.nodeninja.simflightstracker.tracker.external;
 
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
-import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
-import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimDataApiResponse;
-import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
-import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimV3BaseResponse;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.*;
 import org.springframework.web.service.annotation.GetExchange;
 
 import java.net.URI;
@@ -32,4 +29,7 @@ public interface VatsimClient {
 
     @GetExchange
     List<FlightPlanHistoryItem> flightPlanHistory(URI uri);
+
+    @GetExchange
+    VatsimUserHours getUserHours(URI uri);
 }
