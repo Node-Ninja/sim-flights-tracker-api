@@ -3,6 +3,7 @@ package dev.nodeninja.simflightstracker.tracker.service;
 import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimUserHours;
 
 import java.util.List;
 
@@ -69,4 +70,6 @@ public interface VatsimService {
     List<FlightPlanHistoryItem> flightPlanHistory(String vatsimId);
 
     FlightTrack getFlightTrack(String callsign);
+
+    VatsimUserHours getUserHours(String vatsimId);
 }

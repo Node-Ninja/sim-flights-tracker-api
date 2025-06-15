@@ -5,6 +5,7 @@ import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
 import dev.nodeninja.simflightstracker.exceptions.BusinessException;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
+import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimUserHours;
 import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
 import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
@@ -186,5 +187,19 @@ public class VatsimServiceImpl implements VatsimService {
     @Override
     public FlightTrack getFlightTrack(String callsign) {
         return flightTracksRepository.findByCallsign(callsign);
+    }
+
+    @Override
+    public VatsimUserHours getUserHours(String vatsimId) {
+        URI endpoint = URI.create(configProps.getVatsim().getHost().getCore() + "/members/" + vatsimId + "/stats");
+
+        try {
+            return vatsimClient.getUserHours(endpoint);
+        } catch (Exception e) {
+            throw new BusinessException(
+                    "Could not get Vatsim stats",
+                    "VATSIM_STATS_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
+        }
     }
 }
