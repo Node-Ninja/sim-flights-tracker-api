@@ -1,12 +1,10 @@
 package dev.nodeninja.simflightstracker.api.v2.model;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.time.OffsetDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.OffsetDateTime;
 
 @Data
 @Builder
