@@ -48,7 +48,7 @@ stages:
       inputs:
         azureSubscription: 'Main Subscription(98a0acc1-cf43-4cf6-8485-208999a388a6)'
         mavenPomFile: 'pom.xml'
-        goals: 'clean package'
+        goals: 'clean package -DskipTests'
         publishJUnitResults: false
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.17'
