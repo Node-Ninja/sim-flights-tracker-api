@@ -32,6 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                             "/sft_transparent.png",
                             "/airlines/**",
                             "/apple.svg",
+                            "/assets/**",
                             "/"
                     );
         }

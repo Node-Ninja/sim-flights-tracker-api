@@ -1,11 +1,8 @@
 package dev.nodeninja.simflightstracker.api.v2.controller;
 
-import dev.nodeninja.simflightstracker.api.v2.model.Airport;
-import dev.nodeninja.simflightstracker.tracker.service.AirportService;
-import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
-import dev.nodeninja.simflightstracker.tracker.service.impl.AirportServiceImpl;
-import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import dev.nodeninja.simflightstracker.api.v2.model.Airport;
+import dev.nodeninja.simflightstracker.tracker.service.AirportService;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor

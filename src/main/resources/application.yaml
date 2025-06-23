@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}/simflightstracker
+      uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}/${MONGO_DB}
 
 sft:
   ivao:
