@@ -25,14 +25,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
                     .excludePathPatterns(
                             "/index.html",
                             "/privacy.html",
-                            "/play.png",
                             "/app-ads.txt",
                             "/robots.txt",
                             "/favicon.ico",
                             "/sft_transparent.png",
                             "/airlines/**",
-                            "/apple.svg",
                             "/assets/**",
+                            "/_1.jpg",
+                            "/_2.jpg",
+                            "/_3.jpg",
+                            "/_4.png",
                             "/"
                     );
         }
