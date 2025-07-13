@@ -23,6 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             registry.addInterceptor(appCheckInterceptor)
                     .addPathPatterns("/**")
                     .excludePathPatterns(
+                            "/api/v2/stats",
                             "/index.html",
                             "/privacy.html",
                             "/app-ads.txt",
@@ -35,6 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                             "/_2.jpg",
                             "/_3.jpg",
                             "/_4.png",
+                            "/_5.png",
                             "/"
                     );
         }
