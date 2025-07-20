@@ -1,5 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.service.impl;
 
+import com.github.f4b6a3.ulid.UlidCreator;
 import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.config.ApplicationConfigProperties;
 import dev.nodeninja.simflightstracker.exceptions.BusinessException;
@@ -9,17 +10,23 @@ import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimUserHo
 import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
 import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
+import dev.nodeninja.simflightstracker.tracker.model.AuthRecord;
+import dev.nodeninja.simflightstracker.tracker.repository.AuthRepository;
 import dev.nodeninja.simflightstracker.tracker.repository.FlightTracksRepository;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.core5.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VatsimServiceImpl implements VatsimService {
@@ -27,6 +34,7 @@ public class VatsimServiceImpl implements VatsimService {
     private final VatsimClient vatsimClient;
     private final VatsimLiveDataCache vatsimLiveDataCache;
     private final FlightTracksRepository flightTracksRepository;
+    private final AuthRepository authRepository;
 
     private final ApplicationConfigProperties configProps;
 
@@ -200,6 +208,98 @@ public class VatsimServiceImpl implements VatsimService {
                     "Could not get Vatsim stats",
                     "VATSIM_STATS_ERROR",
                     HttpStatus.SC_BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public String startAuth(String simNetwork) {
+        //  add auth record to and then send back auth ID;
+        var authId = UlidCreator.getUlid();
+
+        var record = AuthRecord.builder()
+                .authId(authId.toString())
+                .simNetwork(simNetwork)
+                .build();
+
+        var createdAuth = authRepository.save(record);
+
+        return createdAuth.getAuthId();
+    }
+
+    @Override
+    public boolean patchAuth(String authCode, String state) {
+        var endpoint = URI.create(configProps.getVatsim().getOAuth().getTokenUri());
+        try {
+            //  try to find auth record by state;
+            var foundRecord = authRepository.findByAuthId(state);
+
+            if (foundRecord == null) { return false; }
+
+            //  record found. Exchange authCode for tokens;
+            var authRequest = new LinkedMultiValueMap<String, String>();
+            authRequest.add("client_id", configProps.getVatsim().getOAuth().getClientId());
+            authRequest.add("client_secret", configProps.getVatsim().getOAuth().getClientSecret());
+            authRequest.add("grant_type", configProps.getVatsim().getOAuth().getGrantType());
+            authRequest.add("redirect_uri", configProps.getVatsim().getOAuth().getRedirectUri());
+            authRequest.add("code", authCode);
+
+            var response = vatsimClient.exchangeCodeForToken(
+              endpoint,
+              authRequest
+            );
+            log.info(response.toString());
+
+            //  patch record with new data;
+            foundRecord.setToken(response.getAccessToken());
+            foundRecord.setRefresh(response.getRefreshToken());
+            foundRecord.setExpiresIn(response.getExpiresIn());
+            foundRecord.setType(response.getTokenType());
+
+            authRepository.save(foundRecord);
+
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public AuthedUserDetails getAuthedUserDetails(String authId) {
+        try {
+            var authRecord = authRepository.findByAuthId(authId);
+
+            if (authRecord == null) { return null; }
+
+            var token = authRecord.getToken();
+
+            if (token == null) { return null; }
+
+            var headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + token);
+
+            var endpoint =  URI.create(configProps.getVatsim().getOAuth().getUserDetails());
+
+            var response = vatsimClient.getUserDetails(endpoint, headers);
+
+            log.info(response.toString());
+
+            return AuthedUserDetails.builder()
+                    .cid(response.getData().getCid())
+                    .fullName(response.getData().getPersonal().getNameFull())
+                    .firstName(response.getData().getPersonal().getNameFirst())
+                    .lastName(response.getData().getPersonal().getNameLast())
+                    .email(response.getData().getPersonal().getEmail())
+                    .country(response.getData().getPersonal().getCountry().getName())
+                    .countryCode(response.getData().getPersonal().getCountry().getId())
+                    .controllerRating(response.getData().getVatsim().getRating().getLongName())
+                    .pilotRating(response.getData().getVatsim().getPilotrating().getLongName())
+                    .division(response.getData().getVatsim().getDivision().getName())
+                    .build();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
         }
     }
 }

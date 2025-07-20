@@ -72,4 +72,10 @@ public interface VatsimService {
     FlightTrack getFlightTrack(String callsign);
 
     VatsimUserHours getUserHours(String vatsimId);
+
+    String startAuth(String simNetwork);
+
+    boolean patchAuth(String authCode, String state);
+
+    AuthedUserDetails getAuthedUserDetails(String authId);
 }

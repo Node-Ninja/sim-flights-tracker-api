@@ -23,6 +23,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             registry.addInterceptor(appCheckInterceptor)
                     .addPathPatterns("/**")
                     .excludePathPatterns(
+                            "/oauth/callback",
+                            "/oauth/complete",
                             "/api/v2/stats",
                             "/index.html",
                             "/privacy.html",

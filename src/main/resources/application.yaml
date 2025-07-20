@@ -18,9 +18,11 @@ sft:
     oauth:
       client-id: ${VATSIM_CID}
       client-secret: ${VATSIM_CST}
-      grant-type: client_credentials
+      grant-type: authorization_code
       scope: openid
-      token-uri: https://data.vatsim.net/v2/oauth/token
+      token-uri: https://auth.vatsim.net/oauth/token
+      redirect-uri: https://www.simflightstracker.com/oauth/callback
+      user-details: https://auth.vatsim.net/api/user
     host:
       v2: https://my.vatsim.net/api/v2
       v3: https://data.vatsim.net/v3
