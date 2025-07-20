@@ -22,7 +22,7 @@ public class AuthController {
 
         var response = vatsimService.patchAuth(code, state);
         var status = response ? "success" : "failure";
-        var redirectUri = "/oauth/complete?state=" + state + "&status=" + status;
+        var redirectUri = "https://www.simflightstracker.com/oauth/complete?state=" + state + "&status=" + status;
 
         return new RedirectView(redirectUri);
     }
