@@ -8,7 +8,10 @@ import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -82,5 +85,12 @@ public class VatsimController {
     @PostMapping("/user/details/{authId}")
     public AuthedUserDetails getUserDetails(@PathVariable String authId) {
         return vatsimService.getAuthedUserDetails(authId);
+    }
+
+    @PostMapping("/user/logout/{authId}")
+    public String logoutAuth(@NotNull @PathVariable String authId) {
+        vatsimService.destroyVatsimRecord(authId);
+
+        return "OK";
     }
 }

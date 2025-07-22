@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthRepository extends MongoRepository<AuthRecord, ObjectId> {
     AuthRecord findByAuthId(String authId);
+
+    void deleteByAuthId(String authId);
 }

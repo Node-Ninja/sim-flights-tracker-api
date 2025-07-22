@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.Instant;
 
 @Data
 @Builder
@@ -21,5 +22,7 @@ public class AuthRecord {
     private String token;
     private String refresh;
     private Integer expiresIn;
+    private Instant expiryDate;
+    private Instant refreshExpiryDate;
     private VatsimUserDetails vatsimUserDetails;
 }

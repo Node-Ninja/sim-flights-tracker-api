@@ -17,7 +17,7 @@ public class AuthController {
     @GetMapping
     public RedirectView patchAuthRecord(@RequestParam(required = false) String code, @RequestParam String state) {
         if (code==null || state==null) {
-            return  new RedirectView("/oauth/complete?status=failed&state="+state);
+            return  new RedirectView("https://www.simflightstracker.com/oauth/complete?status=failed&state="+state);
         }
 
         var response = vatsimService.patchAuth(code, state);

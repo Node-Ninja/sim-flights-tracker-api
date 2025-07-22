@@ -78,4 +78,6 @@ public interface VatsimService {
     boolean patchAuth(String authCode, String state);
 
     AuthedUserDetails getAuthedUserDetails(String authId);
+
+    void destroyVatsimRecord(String authId);
 }

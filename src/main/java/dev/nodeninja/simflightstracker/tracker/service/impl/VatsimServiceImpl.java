@@ -11,6 +11,8 @@ import dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache;
 import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.mapper.TrackerMapper;
 import dev.nodeninja.simflightstracker.tracker.model.AuthRecord;
+import dev.nodeninja.simflightstracker.tracker.model.GrantType;
+import dev.nodeninja.simflightstracker.tracker.model.VatsimTokenResponse;
 import dev.nodeninja.simflightstracker.tracker.repository.AuthRepository;
 import dev.nodeninja.simflightstracker.tracker.repository.FlightTracksRepository;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
@@ -23,6 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.net.URI;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -228,34 +233,19 @@ public class VatsimServiceImpl implements VatsimService {
 
     @Override
     public boolean patchAuth(String authCode, String state) {
-        var endpoint = URI.create(configProps.getVatsim().getOAuth().getTokenUri());
         try {
             //  try to find auth record by state;
             var foundRecord = authRepository.findByAuthId(state);
 
             if (foundRecord == null) { return false; }
 
-            //  record found. Exchange authCode for tokens;
-            var authRequest = new LinkedMultiValueMap<String, String>();
-            authRequest.add("client_id", configProps.getVatsim().getOAuth().getClientId());
-            authRequest.add("client_secret", configProps.getVatsim().getOAuth().getClientSecret());
-            authRequest.add("grant_type", configProps.getVatsim().getOAuth().getGrantType());
-            authRequest.add("redirect_uri", configProps.getVatsim().getOAuth().getRedirectUri());
-            authRequest.add("code", authCode);
+            var response = getToken(GrantType.authorization_code, authCode);
 
-            var response = vatsimClient.exchangeCodeForToken(
-              endpoint,
-              authRequest
-            );
-            log.info(response.toString());
+            if (response == null) { return false; }
 
-            //  patch record with new data;
-            foundRecord.setToken(response.getAccessToken());
-            foundRecord.setRefresh(response.getRefreshToken());
-            foundRecord.setExpiresIn(response.getExpiresIn());
-            foundRecord.setType(response.getTokenType());
+            var record = patchRecord(foundRecord, response);
 
-            authRepository.save(foundRecord);
+            authRepository.save(record);
 
             return true;
         } catch (Exception e) {
@@ -267,6 +257,9 @@ public class VatsimServiceImpl implements VatsimService {
     @Override
     public AuthedUserDetails getAuthedUserDetails(String authId) {
         try {
+            var authToken = "";
+
+            var now = Instant.now();
             var authRecord = authRepository.findByAuthId(authId);
 
             if (authRecord == null) { return null; }
@@ -275,8 +268,28 @@ public class VatsimServiceImpl implements VatsimService {
 
             if (token == null) { return null; }
 
+            authToken = token;
+
+            if (now.isAfter(authRecord.getExpiryDate())) {
+                if (now.isAfter(authRecord.getRefreshExpiryDate())) {
+                    authRepository.deleteByAuthId(authId);
+                    return null;
+                }
+
+                //  refresh access token;
+                var tokenResponse = getToken(GrantType.refresh_token, authRecord.getRefresh());
+                if (tokenResponse == null) { return null; }
+
+                authToken = tokenResponse.getAccessToken();
+
+                //  patch auth record;
+                var record = patchRecord(authRecord, tokenResponse);
+
+                authRepository.save(record);
+            }
+
             var headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + token);
+            headers.add("Authorization", "Bearer " + authToken);
 
             var endpoint =  URI.create(configProps.getVatsim().getOAuth().getUserDetails());
 
@@ -301,5 +314,59 @@ public class VatsimServiceImpl implements VatsimService {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public void destroyVatsimRecord(String authId) {
+        try {
+            if (StringUtils.isNotBlank(authId)) {
+                authRepository.deleteByAuthId(authId);
+                log.info("Removed record with authId: {}", authId);
+            }
+        } catch (Exception e) {
+            log.info("Could not remove record with authId: {}", authId);
+        }
+    }
+
+    private VatsimTokenResponse getToken(GrantType grantType, String code) {
+        try {
+            var endpoint = URI.create(configProps.getVatsim().getOAuth().getTokenUri());
+            var authRequest = new LinkedMultiValueMap<String, String>();
+
+            authRequest.add("client_id", configProps.getVatsim().getOAuth().getClientId());
+            authRequest.add("client_secret", configProps.getVatsim().getOAuth().getClientSecret());
+            authRequest.add("grant_type", grantType.toString());
+            authRequest.add("redirect_uri", configProps.getVatsim().getOAuth().getRedirectUri());
+
+            switch (grantType) {
+                case authorization_code: authRequest.add("code", code);
+                break;
+                case refresh_token: authRequest.add("refresh_token", code);
+                break;
+            }
+
+            return vatsimClient.exchangeCodeForToken(
+                    endpoint,
+                    authRequest
+            );
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    private AuthRecord patchRecord(AuthRecord authRecord, VatsimTokenResponse response) {
+        var now = Instant.now();
+        var tokenExpiry = now.plusSeconds(response.getExpiresIn() - 120);
+        var refreshExpiry = now.plus(29, ChronoUnit.DAYS);
+
+        //  patch record with new data;
+        authRecord.setToken(response.getAccessToken());
+        authRecord.setRefresh(response.getRefreshToken());
+        authRecord.setExpiresIn(response.getExpiresIn());
+        authRecord.setType(response.getTokenType());
+        authRecord.setExpiryDate(tokenExpiry);
+        authRecord.setRefreshExpiryDate(refreshExpiry);
+
+        return authRecord;
     }
 }
