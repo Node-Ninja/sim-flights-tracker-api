@@ -14,4 +14,5 @@ public class LatLng {
     private double longitude;
     private int altitude;
     private long timestamp;
+    private int speed;
 }

@@ -1,6 +1,4 @@
 package dev.nodeninja.simflightstracker.api.v2.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +13,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlightTrack {
-    @Id
-    @JsonIgnore
-    private ObjectId id;
-    @JsonIgnore
+public class SftFlightTrack {
     private String callsign;
-    private double latitude;
-    private double longitude;
-    private int altitude;
-    private long timestamp;
-    private int speed;
+    private List<FlightTrack> points;
 }
+
 

@@ -80,6 +80,7 @@ public class SftSchedules {
                         .latitude(flight.getLatitude())
                         .longitude(flight.getLongitude())
                         .altitude(flight.getAltitude())
+                        .speed(flight.getGroundspeed())
                         .timestamp(System.currentTimeMillis())
                         .build();
 
@@ -106,6 +107,7 @@ public class SftSchedules {
                             .latitude(flight.getLastTrack().getLatitude())
                             .longitude(flight.getLastTrack().getLongitude())
                             .altitude(flight.getLastTrack().getAltitude())
+                            .speed(flight.getLastTrack().getGroundSpeed())
                             .timestamp(System.currentTimeMillis())
                             .build();
 

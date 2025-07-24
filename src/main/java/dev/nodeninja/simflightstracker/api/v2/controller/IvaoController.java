@@ -50,7 +50,7 @@ public class IvaoController {
     }
 
     @PostMapping("/flights/{callSign}/track")
-    public FlightTrack getFlightTrack(@NotNull @PathVariable String callSign) {
+    public SftFlightTrack getFlightTrack(@NotNull @PathVariable String callSign) {
         return trackUpdaterService.getTrack(callSign, "ivao");
     }
 }
