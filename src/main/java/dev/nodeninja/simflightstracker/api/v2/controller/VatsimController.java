@@ -4,7 +4,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimUserHours;
-import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
+import dev.nodeninja.simflightstracker.tracker.service.impl.TrackUpdaterService;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -92,5 +92,10 @@ public class VatsimController {
         vatsimService.destroyVatsimRecord(authId);
 
         return "OK";
+    }
+
+    @PostMapping("/history/atc/{vatsimId}")
+    public VatsimATCHistory getATCHistory(@NotNull @PathVariable String vatsimId) {
+        return vatsimService.atcHistory(vatsimId);
     }
 }

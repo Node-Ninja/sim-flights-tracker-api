@@ -11,7 +11,7 @@ import dev.nodeninja.simflightstracker.tracker.external.IvaoClient;
 import dev.nodeninja.simflightstracker.tracker.external.VatsimClient;
 import dev.nodeninja.simflightstracker.tracker.http.client.AuthenticatedRestClient;
 import dev.nodeninja.simflightstracker.tracker.http.model.IDProvider;
-import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
+import dev.nodeninja.simflightstracker.tracker.service.impl.TrackUpdaterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

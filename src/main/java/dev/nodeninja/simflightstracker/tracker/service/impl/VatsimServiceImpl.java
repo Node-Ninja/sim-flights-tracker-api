@@ -328,6 +328,21 @@ public class VatsimServiceImpl implements VatsimService {
         }
     }
 
+    @Override
+    public VatsimATCHistory atcHistory(String vatsimId) {
+        URI endpoint = URI.create(configProps.getVatsim().getHost().getCore() + "/members/" + vatsimId + "/atc");
+
+        try {
+            return vatsimClient.getATCHistory(endpoint);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException(
+                    "Could get atc history",
+                    "VATSIM_ATC_HISTORY_ERROR",
+                    HttpStatus.SC_BAD_REQUEST);
+        }
+    }
+
     private VatsimTokenResponse getToken(GrantType grantType, String code) {
         try {
             var endpoint = URI.create(configProps.getVatsim().getOAuth().getTokenUri());

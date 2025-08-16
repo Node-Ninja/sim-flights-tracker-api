@@ -1,5 +1,6 @@
 package dev.nodeninja.simflightstracker.tracker.external;
 
+import dev.nodeninja.simflightstracker.api.v2.model.VatsimATCHistory;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimEvent;
 import dev.nodeninja.simflightstracker.api.v2.model.VatsimTransceiver;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.*;
@@ -46,4 +47,7 @@ public interface VatsimClient {
 
     @GetExchange
     VatsimUserDetails getUserDetails(URI uri, @RequestHeader HttpHeaders headers);
+
+    @GetExchange
+    VatsimATCHistory getATCHistory(URI uri);
 }

@@ -80,4 +80,6 @@ public interface VatsimService {
     AuthedUserDetails getAuthedUserDetails(String authId);
 
     void destroyVatsimRecord(String authId);
+
+    VatsimATCHistory atcHistory(String vatsimId);
 }

@@ -1,4 +1,4 @@
-package dev.nodeninja.simflightstracker.tracker.service;
+package dev.nodeninja.simflightstracker.tracker.service.impl;
 
 import dev.nodeninja.simflightstracker.api.v2.model.FlightTrack;
 import dev.nodeninja.simflightstracker.api.v2.model.LatLng;

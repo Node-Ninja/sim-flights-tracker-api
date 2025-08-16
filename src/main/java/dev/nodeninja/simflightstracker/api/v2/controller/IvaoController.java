@@ -2,7 +2,7 @@ package dev.nodeninja.simflightstracker.api.v2.controller;
 
 import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.service.IvaoService;
-import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
+import dev.nodeninja.simflightstracker.tracker.service.impl.TrackUpdaterService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
