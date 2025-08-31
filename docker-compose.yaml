@@ -16,7 +16,7 @@ services:
       - no-new-privileges:true
 
   spring-app:
-    image: simflightstracker:2.8.4
+    image: simflightstracker:2.8.5-dev
     container_name: sim-flights-tracker
     restart: unless-stopped
     ports:
