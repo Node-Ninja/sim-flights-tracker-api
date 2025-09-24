@@ -295,8 +295,6 @@ public class VatsimServiceImpl implements VatsimService {
 
             var response = vatsimClient.getUserDetails(endpoint, headers);
 
-            log.info(response.toString());
-
             return AuthedUserDetails.builder()
                     .cid(response.getData().getCid())
                     .fullName(response.getData().getPersonal().getNameFull())
@@ -324,7 +322,7 @@ public class VatsimServiceImpl implements VatsimService {
                 log.info("Removed record with authId: {}", authId);
             }
         } catch (Exception e) {
-            log.info("Could not remove record with authId: {}", authId);
+            log.error("Could not remove record with authId: {}", authId);
         }
     }
 
