@@ -1,15 +1,15 @@
-package dev.nodeninja.simflightstracker.tracker.service;
+package dev.nodeninja.simflightstracker.tracker.service.impl;
 
 import dev.nodeninja.simflightstracker.api.v2.model.FlightTrack;
 import dev.nodeninja.simflightstracker.api.v2.model.LatLng;
+import dev.nodeninja.simflightstracker.api.v2.model.SftFlightTrack;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,19 +20,24 @@ public class TrackUpdaterService {
     private final MongoTemplate mongoTemplate;
 
     public void updateTracks(Map<String, LatLng> flightData, String network) {
-        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, FlightTrack.class, "flight_tracks_" + network);
+        List<FlightTrack> tracksToInsert = new ArrayList<>();
 
-        for (Map.Entry<String, LatLng> entry: flightData.entrySet()) {
+        for (Map.Entry<String, LatLng> entry : flightData.entrySet()) {
             String callsign = entry.getKey();
-            LatLng newPoint = entry.getValue();
+            LatLng point = entry.getValue();
 
-            Query query = new Query(Criteria.where("callsign").is(callsign));
-            Update update = new Update().push("points", newPoint);
+            FlightTrack track = new FlightTrack();
+            track.setCallsign(callsign);
+            track.setLatitude(point.getLatitude());
+            track.setLongitude(point.getLongitude());
+            track.setAltitude(point.getAltitude());
+            track.setTimestamp(point.getTimestamp());
+            track.setSpeed(point.getSpeed());
 
-            bulkOps.upsert(query, update);
+            tracksToInsert.add(track);
         }
 
-        bulkOps.execute();
+        mongoTemplate.insert(tracksToInsert, "flight_tracks_" + network);
     }
 
     public void removeStaleTracks(List<String> activeCallsigns, String network) {
@@ -40,11 +45,16 @@ public class TrackUpdaterService {
         mongoTemplate.remove(staleQuery, FlightTrack.class, "flight_tracks_" + network);
     }
 
-    public FlightTrack getTrack(String callsign, String network) {
+    public SftFlightTrack getTrack(String callsign, String network) {
         String collectionName = "flight_tracks_" + network;
 
         Query query = new Query(Criteria.where("callsign").is(callsign));
 
-        return mongoTemplate.findOne(query, FlightTrack.class, collectionName);
+        var tracks = mongoTemplate.find(query, FlightTrack.class, collectionName);
+
+        return SftFlightTrack.builder()
+                .callsign(callsign)
+                .points(tracks)
+                .build();
     }
 }

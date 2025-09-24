@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
-public class LatLng {
-    private double latitude;
-    private double longitude;
-    private int altitude;
-    private long timestamp;
-    private int speed;
+@Builder
+public class VatsimATCHistory {
+    private List<VatsimATCHistoryItem> items;
+    private Integer count;
 }

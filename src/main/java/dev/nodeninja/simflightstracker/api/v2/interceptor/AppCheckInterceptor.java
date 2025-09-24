@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.net.URI;
 import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
@@ -65,7 +66,7 @@ public class AppCheckInterceptor implements HandlerInterceptor {
             }
 
             //  verify if the token was signed by Firebase;
-            JwkProvider provider = new JwkProviderBuilder(new URL(firebaseAppCheckKeyUrl))
+            JwkProvider provider = new JwkProviderBuilder(URI.create(firebaseAppCheckKeyUrl).toURL())
                     .cached(5, Duration.ofHours(12))
                     .build();
 

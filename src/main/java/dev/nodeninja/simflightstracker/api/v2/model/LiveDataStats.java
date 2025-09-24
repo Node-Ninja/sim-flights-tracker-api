@@ -6,13 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class LatLng {
-    private double latitude;
-    private double longitude;
-    private int altitude;
-    private long timestamp;
-    private int speed;
+public class LiveDataStats {
+    private int totalVatsimFlights;
+    private int totalVatsimControllers;
+    private int totalIvaoFlights;
+    private int totalIvaoControllers;
 }

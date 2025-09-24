@@ -16,7 +16,7 @@ services:
       - no-new-privileges:true
 
   spring-app:
-    image: nodeninja-f8c9bdgffpf6b5ga.azurecr.io/simflightstracker:2.7.1
+    image: simflightstracker:2.8.5-dev
     container_name: sim-flights-tracker
     restart: unless-stopped
     ports:
@@ -25,11 +25,16 @@ services:
       MONGO_USER: ${MONGO_USER}
       MONGO_PASS: ${MONGO_PASS}
       MONGO_HOST: ${MONGO_HOST}
+      MONGO_DB: ${MONGO_DB}
       IVAO_CID: ${IVAO_CID}
       IVAO_CST: ${IVAO_CST}
       VATSIM_CID: ${VATSIM_CID}
       VATSIM_CST: ${VATSIM_CST}
       FIREBASE_PROJECT_NAME: ${FIREBASE_PROJECT_NAME}
+      VATSIM_AUTH_SERVER: ${VATSIM_AUTH_SERVER}
+      AUTH_REDIRECT_URL: ${AUTH_REDIRECT_URL}
+      SERVER_PORT: ${SERVER_PORT}
+      APP_CHECK_OFF: ${APP_CHECK_OFF}
     depends_on:
       - mongodb
     networks:
@@ -39,6 +44,8 @@ services:
 
 volumes:
   mongo_data:
+    external: true
+    name: sft_mongo_data
 
 networks:
   backend:

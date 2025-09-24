@@ -18,9 +18,11 @@ sft:
     oauth:
       client-id: ${VATSIM_CID}
       client-secret: ${VATSIM_CST}
-      grant-type: client_credentials
+      grant-type: authorization_code
       scope: openid
-      token-uri: https://data.vatsim.net/v2/oauth/token
+      token-uri: ${VATSIM_AUTH_SERVER}/oauth/token
+      redirect-uri: ${AUTH_REDIRECT_URL}
+      user-details: ${VATSIM_AUTH_SERVER}/api/user
     host:
       v2: https://my.vatsim.net/api/v2
       v3: https://data.vatsim.net/v3
@@ -35,10 +37,10 @@ sft:
   timings:
     vatsim-data-delay: "PT20S"
     ivao-data-delay: "PT20S"
-  app-check-off: false
+  app-check-off: ${APP_CHECK_OFF}
 
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 
 logging:
   level:

@@ -4,7 +4,7 @@ import dev.nodeninja.simflightstracker.api.v2.model.*;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.FlightPlanHistoryItem;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimFlightsHistory;
 import dev.nodeninja.simflightstracker.tracker.adapter.vatsim.model.VatsimUserHours;
-import dev.nodeninja.simflightstracker.tracker.service.TrackUpdaterService;
+import dev.nodeninja.simflightstracker.tracker.service.impl.TrackUpdaterService;
 import dev.nodeninja.simflightstracker.tracker.service.VatsimService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -68,12 +68,34 @@ public class VatsimController {
     }
 
     @PostMapping("/flights/{callSign}/track")
-    public FlightTrack getFlightTrack(@NotNull @PathVariable String callSign) {
+    public SftFlightTrack getFlightTrack(@NotNull @PathVariable String callSign) {
         return trackUpdaterService.getTrack(callSign, "vatsim");
     }
 
     @PostMapping("/history/hours/{vatsimId}")
     public VatsimUserHours getUserHours(@NotNull @PathVariable String vatsimId) {
         return vatsimService.getUserHours(vatsimId);
+    }
+
+    @PostMapping("/auth/start")
+    public String startAuth() {
+        return vatsimService.startAuth("vatsim");
+    }
+
+    @PostMapping("/user/details/{authId}")
+    public AuthedUserDetails getUserDetails(@PathVariable String authId) {
+        return vatsimService.getAuthedUserDetails(authId);
+    }
+
+    @PostMapping("/user/logout/{authId}")
+    public String logoutAuth(@NotNull @PathVariable String authId) {
+        vatsimService.destroyVatsimRecord(authId);
+
+        return "OK";
+    }
+
+    @PostMapping("/history/atc/{vatsimId}")
+    public VatsimATCHistory getATCHistory(@NotNull @PathVariable String vatsimId) {
+        return vatsimService.atcHistory(vatsimId);
     }
 }

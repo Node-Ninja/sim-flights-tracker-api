@@ -38,6 +38,8 @@ public class ApplicationConfigProperties {
             private String grantType;
             private String scope;
             private String tokenUri;
+            private String redirectUri;
+            private String userDetails;
         }
 
     }

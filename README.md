@@ -1,0 +1,85 @@
+# Sim Flights Tracker
+
+Lightweight Spring Boot API that aggregates live flight and controller data from IVAO and VATSIM, and exposes airport/airline information.
+
+Requirements
+- Java 17 or newer (minimum)
+- Maven (or use the included wrapper `mvnw`)
+- MongoDB for persistence
+
+Quick start — requirements
+- Java 17 or newer (minimum)
+- Maven (or use the included wrapper: `./mvnw`)
+- MongoDB for persistence (configured via environment variables)
+
+Environment / configuration
+- Example env file: `environment.example.sh`
+- Important values:
+  - MONGO_USER / MONGO_PASS / MONGO_HOST / MONGO_DB
+  - IVAO_CID / IVAO_CST
+  - VATSIM_CID / VATSIM_CST / VATSIM_AUTH_SERVER / AUTH_REDIRECT_URL
+  - FIREBASE_PROJECT_NAME (if used)
+- Application configuration is bound under the `sft` prefix via `ApplicationConfigProperties`.
+
+Build & run (development)
+- Build:
+  ```sh
+  ./mvnw clean package
+  ```
+- Run:
+  ```sh
+  java -jar target/simflightstracker-*.jar
+  ```
+- The application enables scheduling (see the main application class).
+
+Docker
+- Build the image and run using the included `Dockerfile`. The Dockerfile copies the fat jar named like `simflightstracker-*.jar` to `sft.jar` and runs it on port 8080.
+
+API overview (controllers)
+- IVAO endpoints:
+  - Live data, flight details, ATC details, events, tracks
+- VATSIM endpoints:
+  - Live data, flight details, ATC, METAR, auth flow, history
+- Airport endpoints:
+  - Airport lookup and related data
+- Airline endpoints:
+  - Airline lookup and related data
+
+Key project files
+- Application entry: `dev.nodeninja.simflightstracker.SimFlightsTracker`
+- Scheduled tasks / path generation: `dev.nodeninja.simflightstracker.tracker.schedule.SftSchedules`
+- HTTP clients / rest config: `dev.nodeninja.simflightstracker.config.RestClientConfig`
+- Config properties: `dev.nodeninja.simflightstracker.config.ApplicationConfigProperties`
+
+Services & components
+- VATSIM service interface: `dev.nodeninja.simflightstracker.tracker.service.VatsimService`
+- IVAO service interface: `dev.nodeninja.simflightstracker.tracker.service.IvaoService`
+- Live-data caches:
+  - `dev.nodeninja.simflightstracker.tracker.component.VatsimLiveDataCache`
+  - `dev.nodeninja.simflightstracker.tracker.component.IvaoLiveDataCache`
+- Authenticated REST flow / OAuth helpers:
+  - `dev.nodeninja.simflightstracker.tracker.http.client.AuthenticatedRestClient`
+
+External adapters & models
+- IVAO adapter and models under `tracker/adapter/ivao`
+- VATSIM adapter and models under `tracker/adapter/vatsim`
+
+Notes
+- OAuth configuration for VATSIM/IVAO is driven from `sft` properties (see `ApplicationConfigProperties`).
+- Scheduled refresh tasks are defined in `SftSchedules`.
+- Static frontend assets are served from `src/main/resources/static` (legacy UI in `static/old_ui`).
+
+Running tests
+- Unit tests run via Maven:
+  ```sh
+  ./mvnw test
+  ```
+
+Helpful files
+- Maven POM: `pom.xml`
+- Example environment: `environment.example.sh`
+- Dockerfile: `Dockerfile`
+
+Contributing
+- Follow existing code patterns in `service`, `adapter`, `controller`, and `component` packages.
+- Keep Java 17+ compatibility and existing configuration property conventions.

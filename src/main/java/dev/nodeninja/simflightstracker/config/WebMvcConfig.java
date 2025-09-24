@@ -23,16 +23,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
             registry.addInterceptor(appCheckInterceptor)
                     .addPathPatterns("/**")
                     .excludePathPatterns(
+                            "/oauth/callback",
+                            "/oauth/complete",
+                            "/api/v2/stats",
                             "/index.html",
                             "/privacy.html",
-                            "/play.png",
                             "/app-ads.txt",
                             "/robots.txt",
                             "/favicon.ico",
                             "/sft_transparent.png",
                             "/airlines/**",
-                            "/apple.svg",
                             "/assets/**",
+                            "/_1.jpg",
+                            "/_2.jpg",
+                            "/_3.jpg",
+                            "/_4.png",
+                            "/_5.png",
                             "/"
                     );
         }
