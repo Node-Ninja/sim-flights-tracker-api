@@ -187,7 +187,7 @@ public class TrackerMapper {
                 .model(aircraft.getModel())
                 .wakeTurbulence(aircraft.getWakeTurbulence())
                 .numberEngines(aircraft.getNumberEngines())
-                .isMilitary(aircraft.getIsMilitary())
+                .isMilitary(false)
                 .build();
     }
 
