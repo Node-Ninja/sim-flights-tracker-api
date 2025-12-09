@@ -19,5 +19,4 @@ public class IvaoAirportSummary {
     private String city;
     private Double latitude;
     private Double longitude;
-    private Boolean military;
 }

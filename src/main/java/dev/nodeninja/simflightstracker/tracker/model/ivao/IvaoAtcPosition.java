@@ -16,7 +16,6 @@ import java.util.List;
 public class IvaoAtcPosition {
     private String airportId;
     private String atcCallsign;
-    private Boolean military;
     @Nullable
     private String middleIdentifier;
     private String position;
